@@ -16,18 +16,10 @@ class Disasm(abc.ABC):
         pass
 
     def _get_windown_disasm_path(self) -> str:
-        return str(
-            Path(
-                f"./bin/{self.NAME}/{self.NAME}.exe"
-            ).absolute()
-        )
+        return str(Path(f"./bin/{self.NAME}/{self.NAME}.exe").absolute())
 
     def _get_unix_disasm_path(self) -> str:
-        return str(
-            Path(
-                f"./bin/{self.NAME}/{self.NAME}"
-            ).absolute()
-        )
+        return str(Path(f"./bin/{self.NAME}/{self.NAME}").absolute())
 
     def get_disasm_path(self) -> str:
         return str(
@@ -45,13 +37,7 @@ class ClrxDisasm(Disasm):
     def invoke(self):
         with open(self.path_to_asm, "w", encoding="utf-8") as file:
             subprocess.run(
-                [
-                    self.get_disasm_path(),
-                    self.path_to_bin,
-                    "-dCfs"
-                ],
-                stdout=file,
-                check=True
+                [self.get_disasm_path(), self.path_to_bin, "-dCfs"], stdout=file, check=True
             )
         with open(self.path_to_asm, "r", encoding="utf-8") as file:
             text: list[str] = file.readlines()
@@ -67,13 +53,7 @@ class AmdGpuDisasm(Disasm):
 
     def invoke(self):
         subprocess.run(
-            [
-                self.get_disasm_path(),
-                self.path_to_bin,
-                "-o",
-                self.path_to_asm
-            ],
-            check=True
+            [self.get_disasm_path(), self.path_to_bin, "-o", self.path_to_asm], check=True
         )
 
 

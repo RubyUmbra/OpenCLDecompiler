@@ -23,12 +23,12 @@ class RegisterSignType(enum.Enum):
 
 class RegisterContent:
     def __init__(
-            self,
-            value: Union[list[any], any],
-            type_: Union[list, RegisterType],
-            size: Union[list, int] = DEFAULT_REGISTER_SIZE,
-            data_type: Union[list, Optional[str]] = None,
-            sign: Union[list, RegisterSignType] = RegisterSignType.POSITIVE,
+        self,
+        value: Union[list[any], any],
+        type_: Union[list, RegisterType],
+        size: Union[list, int] = DEFAULT_REGISTER_SIZE,
+        data_type: Union[list, Optional[str]] = None,
+        sign: Union[list, RegisterSignType] = RegisterSignType.POSITIVE,
     ):
         self._value = value
         self._type = type_
@@ -66,7 +66,7 @@ class RegisterContent:
                 register_contents=[
                     copy.deepcopy(self),
                     copy.deepcopy(other),
-                ]
+                ],
             )
 
         if isinstance(other, str):
@@ -86,7 +86,7 @@ class RegisterContent:
                 register_contents=[
                     copy.deepcopy(self),
                     copy.deepcopy(other),
-                ]
+                ],
             )
 
         raise NotImplementedError()
@@ -100,7 +100,7 @@ class RegisterContent:
                 register_contents=[
                     copy.deepcopy(self),
                     copy.deepcopy(other),
-                ]
+                ],
             )
 
         raise NotImplementedError()
@@ -119,7 +119,7 @@ class RegisterContent:
                         size=0,
                         data_type=None,
                     ),
-                ]
+                ],
             )
 
         raise NotImplementedError()
@@ -133,7 +133,7 @@ class RegisterContent:
                 register_contents=[
                     copy.deepcopy(self),
                     copy.deepcopy(other),
-                ]
+                ],
             )
 
         raise NotImplementedError()
@@ -147,7 +147,7 @@ class RegisterContent:
                 register_contents=[
                     copy.deepcopy(self),
                     copy.deepcopy(other),
-                ]
+                ],
             )
 
         raise NotImplementedError()
@@ -161,7 +161,7 @@ class RegisterContent:
                 register_contents=[
                     copy.deepcopy(self),
                     copy.deepcopy(other),
-                ]
+                ],
             )
         elif isinstance(other, int):
             return OperationRegisterContent(
@@ -174,7 +174,7 @@ class RegisterContent:
                         size=0,
                         data_type=None,
                     ),
-                ]
+                ],
             )
         else:
             raise NotImplementedError()

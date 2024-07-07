@@ -13,7 +13,4 @@ class LineParser(BaseParser):
         self._parser = parser
 
     def parse(self, text: str) -> Optional[tuple[ParseObject, str]]:
-        return (
-                self._parser +
-                IgnoreParser(ParserElementParser(line_end))
-        ).parse(text)
+        return (self._parser + IgnoreParser(ParserElementParser(line_end))).parse(text)

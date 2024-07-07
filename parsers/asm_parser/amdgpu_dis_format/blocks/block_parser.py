@@ -14,11 +14,9 @@ from parsers.parse_objects.base.list_parse_object import ListParseObject
 class AmdGpuDisBlockParser(BaseParser):
     def parse(self, text: str) -> Optional[tuple[ParseObject, str]]:
         parse_result = LineParser(
-            IgnoreParser(ParserElementParser(line_start)) +
-            ParserElementParser(
-                Regex(r"[^:\s]+")
-            ) +
-            IgnoreParser(ParserElementParser(Literal(":")))
+            IgnoreParser(ParserElementParser(line_start))
+            + ParserElementParser(Regex(r"[^:\s]+"))
+            + IgnoreParser(ParserElementParser(Literal(":")))
         ).parse(text)
 
         if parse_result is None:

@@ -22,18 +22,18 @@ from src.utils import ConfigData, DriverFormat, Singleton
 
 
 def set_reg_value(  # pylint: disable=R0913
-        node,
-        new_value,
-        to_reg,
-        from_regs,
-        data_type,
-        exec_condition=None,
-        reg_type=RegisterType.UNKNOWN,
-        integrity=Integrity.ENTIRE,
-        register_content_type=RegisterContent,
-        sign: Union[RegisterSignType, list[RegisterSignType]] = RegisterSignType.POSITIVE,
-        operation: Optional[OperationType] = None,
-        size: Optional[list[int]] = None,
+    node,
+    new_value,
+    to_reg,
+    from_regs,
+    data_type,
+    exec_condition=None,
+    reg_type=RegisterType.UNKNOWN,
+    integrity=Integrity.ENTIRE,
+    register_content_type=RegisterContent,
+    sign: Union[RegisterSignType, list[RegisterSignType]] = RegisterSignType.POSITIVE,
+    operation: Optional[OperationType] = None,
+    size: Optional[list[int]] = None,
 ):
     decompiler_data = DecompilerData()
     if register_content_type == RegisterContent:
@@ -59,9 +59,11 @@ def set_reg_value(  # pylint: disable=R0913
                         data_type=data_type_,
                         size=size_,
                     )
-                    for value, type_, sign_, data_type_, size_ in zip(new_value, reg_type, sign, data_type, size)
+                    for value, type_, sign_, data_type_, size_ in zip(
+                        new_value, reg_type, sign, data_type, size
+                    )
                 ]
-            )
+            ),
         )
     elif register_content_type == OperationRegisterContent:
         if not isinstance(sign, list):
@@ -76,7 +78,7 @@ def set_reg_value(  # pylint: disable=R0913
                             data_type=data_type,
                         )
                         for value, type_ in zip(new_value, reg_type)
-                    ]
+                    ],
                 ),
             )
         else:
@@ -92,8 +94,10 @@ def set_reg_value(  # pylint: disable=R0913
                                 sign=sign_,
                                 data_type=data_type_,
                             )
-                            for value, type_, sign_, data_type_ in zip(new_value, reg_type, sign, data_type)
-                        ]
+                            for value, type_, sign_, data_type_ in zip(
+                                new_value, reg_type, sign, data_type
+                            )
+                        ],
                     ),
                 )
             else:
@@ -109,7 +113,7 @@ def set_reg_value(  # pylint: disable=R0913
                                 data_type=data_type,
                             )
                             for value, type_, sign_ in zip(new_value, reg_type, sign)
-                        ]
+                        ],
                     ),
                 )
     else:
@@ -124,10 +128,10 @@ def set_reg_value(  # pylint: disable=R0913
 
 
 def set_reg(
-        node,
-        to_reg: str,
-        from_regs: list[str],
-        reg: Register,
+    node,
+    to_reg: str,
+    from_regs: list[str],
+    reg: Register,
 ):
     return set_reg_value(
         node=node,
@@ -139,8 +143,12 @@ def set_reg(
         integrity=reg.integrity,
         sign=reg.register_content._sign,  # pylint: disable=W0212
         register_content_type=type(reg.register_content),
-        operation=reg.register_content._operation if isinstance(reg.register_content,  # pylint: disable=W0212
-                                                                OperationRegisterContent) else None,
+        operation=reg.register_content._operation  # pylint: disable=W0212
+        if isinstance(
+            reg.register_content,
+            OperationRegisterContent,
+        )
+        else None,
         size=reg.register_content._size,  # pylint: disable=W0212
     )
 
@@ -148,7 +156,7 @@ def set_reg(
 def make_elem_from_addr(var):
     separator_pos = var.find(" + ")
     param_name = var[:separator_pos]
-    index = var[separator_pos + 3:]
+    index = var[separator_pos + 3 :]
     var = param_name + "[" + index + "]"
     return var
 
@@ -162,9 +170,11 @@ def make_new_type_without_modifier(node, register):
     return new_from_reg_type
 
 
-def compare_values(node: Node, to_reg: str, from_reg0: str, from_reg1: str, operation: str, suffix: str) -> Node:
+def compare_values(
+    node: Node, to_reg: str, from_reg0: str, from_reg1: str, operation: str, suffix: str
+) -> Node:
     datatype = make_opencl_type(suffix)
-    datatype = f'({datatype})' if datatype != 'unknown type' else ''
+    datatype = f"({datatype})" if datatype != "unknown type" else ""
     new_value = make_op(node, from_reg0, from_reg1, operation, datatype, datatype, suffix=suffix)
     from_regs = [from_reg0, from_reg1]
     if is_range(to_reg):
@@ -182,18 +192,18 @@ def simplify_opencl_statement(opencl_line):
     start_close = 0
     new_line = ""
     while True:
-        open_bracket_position = opencl_line.find('[', start_open + 1)
-        close_bracket_position = opencl_line.find(']', start_close + 1)
+        open_bracket_position = opencl_line.find("[", start_open + 1)
+        close_bracket_position = opencl_line.find("]", start_close + 1)
         if open_bracket_position == -1:
             break
-        substring = opencl_line[open_bracket_position + 1:close_bracket_position]
+        substring = opencl_line[open_bracket_position + 1 : close_bracket_position]
         current_type_conversion = {}
         for key, data_type in decompiler_data.type_conversion.items():
             if data_type + key in substring:
                 current_type_conversion[key] = data_type
         for key, data_type in current_type_conversion.items():
-            substring = substring.replace(data_type, '')
-        if substring != '':
+            substring = substring.replace(data_type, "")
+        if substring != "":
             substring = sympy.simplify(substring)
             substring = sympy.sstr(substring)
         # doesn't recover type (int)A in case (int)(A + B) - B
@@ -202,14 +212,14 @@ def simplify_opencl_statement(opencl_line):
                 substring = substring.replace(key, data_type + key)
         # recover all left symbols from [
         if start_close == 0:
-            new_line += opencl_line[start_close:open_bracket_position + 1]
+            new_line += opencl_line[start_close : open_bracket_position + 1]
         else:
-            new_line += opencl_line[start_close + 1:open_bracket_position + 1]
-        new_line += substring + ']'
+            new_line += opencl_line[start_close + 1 : open_bracket_position + 1]
+        new_line += substring + "]"
         start_open = open_bracket_position
         start_close = close_bracket_position
     if start_close != 0:
-        new_line += opencl_line[start_close + 1:]
+        new_line += opencl_line[start_close + 1 :]
     else:
         new_line = opencl_line
     return new_line
@@ -217,11 +227,11 @@ def simplify_opencl_statement(opencl_line):
 
 # gdata0[get_local_id(0)] -> gdata0
 def get_name(key):
-    position_gdata = key.find('gdata')
+    position_gdata = key.find("gdata")
     previous_position = position_gdata
-    while position_gdata + 5 < len(key) and '0' <= key[position_gdata + 5] <= '9':
+    while position_gdata + 5 < len(key) and "0" <= key[position_gdata + 5] <= "9":
         position_gdata += 1
-    return key[previous_position:position_gdata + 5]
+    return key[previous_position : position_gdata + 5]
 
 
 def optimize_names_of_vars():
@@ -229,22 +239,24 @@ def optimize_names_of_vars():
     new_names_of_vars = {}
     # remove gdata element access (gdata[...] -> gdata)
     for key, val in decompiler_data.names_of_vars.items():
-        if 'gdata' in key:
+        if "gdata" in key:
             name = get_name(key)
             new_names_of_vars[name] = val
-        elif 'var' in key:
+        elif "var" in key:
             new_names_of_vars[key] = val
     decompiler_data.names_of_vars = new_names_of_vars
     for key, val in decompiler_data.var_value.items():
-        if 'gdata' in val:
+        if "gdata" in val:
             new_val = get_name(val)
             decompiler_data.var_value[key] = new_val
 
 
 # TODO: разобраться, как перейти к общему случаю
 def check_big_values(node, start_register, end_register):
-    if node.state.registers[start_register].val == '0xa2000000' \
-            and node.state.registers[end_register].val == '0x426d1a94':
+    if (
+        node.state.registers[start_register].val == "0xa2000000"
+        and node.state.registers[end_register].val == "0x426d1a94"
+    ):
         return True, "1e12"
     return False, 0
 
@@ -283,27 +295,29 @@ def try_get_reg(node, register):
 def change_vals_for_make_op(node, register, reg_type, operation, _suffix):
     decompiler_data = DecompilerData()
     new_val = check_reg_for_val(node, register)
-    if (operation != "+" or reg_type) and ("-" in new_val or "+" in new_val or "*" in new_val or "/" in new_val):
-        new_val = f'({new_val})'
-    if reg_type != '':
+    if (operation != "+" or reg_type) and (
+        "-" in new_val or "+" in new_val or "*" in new_val or "/" in new_val
+    ):
+        new_val = f"({new_val})"
+    if reg_type != "":
         decompiler_data.type_conversion[new_val] = reg_type
     new_val = reg_type + new_val
-    if len(reg_type) > 0 and ')' not in reg_type:
-        new_val += ')'
+    if len(reg_type) > 0 and ")" not in reg_type:
+        new_val += ")"
     return new_val
 
 
-def make_op(node, register0, register1, operation, type0='', type1='', suffix=''):
+def make_op(node, register0, register1, operation, type0="", type1="", suffix=""):
     new_val0 = change_vals_for_make_op(node, register0, type0, operation, suffix)
     new_val1 = change_vals_for_make_op(node, register1, type1, operation, suffix)
-    return f'{new_val0} {operation} {new_val1}'
+    return f"{new_val0} {operation} {new_val1}"
 
 
 def evaluate_from_hex(global_data, size, flag):
     typed_global_data = []
     for element in range(int(len(global_data) / size)):
-        array_of_bytes = global_data[element * size: element * size + size]
-        string_of_bytes = ''.join(elem[2:] + '' for elem in array_of_bytes)
+        array_of_bytes = global_data[element * size : element * size + size]
+        string_of_bytes = "".join(elem[2:] + "" for elem in array_of_bytes)
         # output binascii.unhexlify is byteset from string; struct.unpack encode byte to value.
         value = struct.unpack(flag, binascii.unhexlify(string_of_bytes))[0]
         typed_global_data.append(str(value))
@@ -405,7 +419,7 @@ class DecompilerData(metaclass=Singleton):  # pylint: disable=R0904, R0902
             "pc": 0,
             "scc": 0,
             "vcc": 0,
-            "exec": 0
+            "exec": 0,
         }
         self.names_of_vars = {}
         self.lds_vars = {}
@@ -516,7 +530,7 @@ class DecompilerData(metaclass=Singleton):  # pylint: disable=R0904, R0902
             "pc": 0,
             "scc": 0,
             "vcc": 0,
-            "exec": 0
+            "exec": 0,
         }
         self.names_of_vars = {}
         self.lds_vars = {}
@@ -552,8 +566,8 @@ class DecompilerData(metaclass=Singleton):  # pylint: disable=R0904, R0902
         g_id = ["s8", "s9", "s10"] if self.config_data.usesetup else ["s6", "s7", "s8"]
         if self.is_rdna3:
             g_id = ["s2", "s3", "s4"]
-        if ',' in dimensions:
-            dimensions = dimensions.split(',')
+        if "," in dimensions:
+            dimensions = dimensions.split(",")
             max_dim = dimensions[0]
             for dim in dimensions:
                 if len(dim) > len(max_dim):

@@ -11,9 +11,9 @@ from parsers.parse_objects.base.list_parse_object import ListParseObject
 
 class ListElementValuesParser(BaseParser):
     def __init__(
-            self,
-            white_prefix: str,
-            check_spaces: bool,
+        self,
+        white_prefix: str,
+        check_spaces: bool,
     ):
         self._white_prefix = white_prefix
         self._check_spaces = check_spaces
@@ -41,12 +41,8 @@ class ListElementValuesParser(BaseParser):
         if not rest.startswith(":"):
             return ListParseObject([key]), rest
 
-        parser = (
-                IgnoreParser(ParserElementParser(Literal(":"))) +
-                (
-                        ListParser(self._white_prefix) |
-                        ParserElementParser(Regex("[^\n]+"))
-                )
+        parser = IgnoreParser(ParserElementParser(Literal(":"))) + (
+            ListParser(self._white_prefix) | ParserElementParser(Regex("[^\n]+"))
         )
         parse_result = parser.parse(rest)
         if parse_result is None:
@@ -62,9 +58,8 @@ class ListElementParser(BaseParser):
         self._white_prefix = white_prefix
 
     def parse(self, text: str) -> Optional[tuple[ParseObject, str]]:
-        parser = (
-                IgnoreParser(ParserElementParser(Literal("-"))) +
-                ListElementValuesParser(self._white_prefix, False)
+        parser = IgnoreParser(ParserElementParser(Literal("-"))) + ListElementValuesParser(
+            self._white_prefix, False
         )
         parse_result = parser.parse(text)
         if parse_result is None:
@@ -72,9 +67,7 @@ class ListElementParser(BaseParser):
         first_value, rest = parse_result
         first_value = first_value.obj
 
-        parser = OneOrMoreParser(
-            ListElementValuesParser(self._white_prefix, True)
-        )
+        parser = OneOrMoreParser(ListElementValuesParser(self._white_prefix, True))
         parse_result = parser.parse(rest)
         if parse_result is None:
             return ListParseObject(first_value), rest
@@ -100,17 +93,14 @@ class ListParser(BaseParser):
         if not new_white_prefix.startswith(self._white_prefix):
             return None
 
-        return OneOrMoreParser(
-            ListElementParser(new_white_prefix)
-        ).parse(rest)
+        return OneOrMoreParser(ListElementParser(new_white_prefix)).parse(rest)
 
 
 class AmdGpuDisConfigsParser(BaseParser):
     def parse(self, text: str) -> Optional[tuple[ParseObject, str]]:
-        parser = (
-                IgnoreParser(ParserElementParser(line_start + Literal("amdhsa.kernels:"))) +
-                ListParser("\n")
-        )
+        parser = IgnoreParser(
+            ParserElementParser(line_start + Literal("amdhsa.kernels:"))
+        ) + ListParser("\n")
         parse_result = parser.parse(text)
         if parse_result is None:
             return None

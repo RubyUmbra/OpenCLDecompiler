@@ -9,5 +9,7 @@ class VMulF64(BaseInstruction):
         self.src1 = self.instruction[3]
 
     def to_print_unresolved(self):
-        self.decompiler_data.write(f"{self.vdst} = (double){self.src0} * (double){self.src1} // {self.name}\n")
+        self.decompiler_data.write(
+            f"{self.vdst} = (double){self.src0} * (double){self.src1} // {self.name}\n"
+        )
         return self.node

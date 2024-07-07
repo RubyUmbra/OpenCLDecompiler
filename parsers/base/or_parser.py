@@ -5,10 +5,7 @@ from parsers.parse_objects.base import ParseObject
 
 
 class OrParser(BaseParser):
-    def __init__(
-            self,
-            *parsers: BaseParser
-    ):
+    def __init__(self, *parsers: BaseParser):
         self._parsers = parsers
 
     def parse(self, text: str) -> Optional[tuple[ParseObject, str]]:
