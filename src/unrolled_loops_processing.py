@@ -43,7 +43,7 @@ def to_int(x: str) -> int | None:
             return None
 
 
-def process_unrolled_loops():  # pylint: disable=R0914
+def process_unrolled_loops():
     decompiler_data = DecompilerData()
     unrolling_limit = decompiler_data.unrolling_limit
     region: Region = decompiler_data.improve_cfg
@@ -171,5 +171,5 @@ def process_unrolled_loops():  # pylint: disable=R0914
                 child: Node = cur.children[0]
                 cur.children = child.children
 
-            cur.children[0].state.registers[dst].register_content._value = "acc"  # pylint: disable=W0212
+            cur.children[0].state.registers[dst].register_content._value = "acc"
             cur.add_first_child(Region(RegionType.UNROLLED_LOOP, (before, first, last, diff, inside)))

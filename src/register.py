@@ -53,7 +53,7 @@ class Register:
         )
 
     def cast_to(self, data_type: str):
-        self.register_content._data_type = data_type  # pylint: disable=W0212
+        self.register_content._data_type = data_type
 
     def get_value(self) -> any:
         return self.register_content.get_value()
@@ -170,7 +170,7 @@ class Register:
                 size=self.get_size(),
             )
         elif isinstance(other, int):
-            from src.decompiler_data import DecompilerData  # pylint: disable=C0415
+            from src.decompiler_data import DecompilerData
 
             _MUL_SIMPLIFY_COMBINATIONS = [
                 *[

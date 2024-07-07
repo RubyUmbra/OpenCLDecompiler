@@ -37,7 +37,7 @@ class VAshrrev(BaseInstruction):
             if self.node.state.registers[start_from_register].val == "0":
                 self.node.state.registers[start_from_register].register_content._value = self.node.state.registers[
                     end_from_register
-                ].val  # pylint: disable=W0212
+                ].val
             new_value = make_op(
                 self.node, start_from_register, str(pow(2, 32 - int(self.src0))), "*", "", "(long)", suffix=self.suffix
             )

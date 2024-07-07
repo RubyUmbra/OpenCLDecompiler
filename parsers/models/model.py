@@ -1,5 +1,3 @@
-# pylint: disable=R0903
-
 import abc
 
 

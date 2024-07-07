@@ -1,5 +1,3 @@
-# pylint: disable=R0401
-
 import binascii
 import struct
 from typing import Optional, Union
@@ -21,7 +19,7 @@ from src.state import State
 from src.utils import ConfigData, DriverFormat, Singleton
 
 
-def set_reg_value(  # pylint: disable=R0913
+def set_reg_value(
     node,
     new_value,
     to_reg,
@@ -131,21 +129,21 @@ def set_reg(
 ):
     return set_reg_value(
         node=node,
-        new_value=reg.register_content._value,  # pylint: disable=W0212
+        new_value=reg.register_content._value,
         to_reg=to_reg,
         from_regs=from_regs,
-        data_type=reg.register_content._data_type,  # pylint: disable=W0212
-        reg_type=reg.register_content._type,  # pylint: disable=W0212
+        data_type=reg.register_content._data_type,
+        reg_type=reg.register_content._type,
         integrity=reg.integrity,
-        sign=reg.register_content._sign,  # pylint: disable=W0212
+        sign=reg.register_content._sign,
         register_content_type=type(reg.register_content),
         operation=reg.register_content._operation
         if isinstance(
-            reg.register_content,  # pylint: disable=W0212
+            reg.register_content,
             OperationRegisterContent,
         )
         else None,
-        size=reg.register_content._size,  # pylint: disable=W0212
+        size=reg.register_content._size,
     )
 
 
@@ -316,7 +314,7 @@ def evaluate_from_hex(global_data, size, flag):
     return typed_global_data
 
 
-class DecompilerData(metaclass=Singleton):  # pylint: disable=R0904, R0902
+class DecompilerData(metaclass=Singleton):
     def __init__(self):
         self.pragram_id = utils.generate_uuid()
         self.name_of_program = None

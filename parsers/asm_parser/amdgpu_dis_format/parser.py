@@ -114,7 +114,6 @@ class AmdGpuDisParser:
             hidden=arg[".value_kind"].startswith("hidden_"),
         )
 
-    # pylint: disable=R1710
     def parse(self, text: str) -> Optional[tuple[ParseObject, str]]:
         text = self._remove_redundant_lines(text)
 
