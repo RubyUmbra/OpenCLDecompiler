@@ -8,5 +8,5 @@ class TestRealKernels:
     def test_weighted_sum_kernel(self):
         template("real_kernels", "weighted_sum_kernel")
 
-    def test_bellmanFordInit_ver1(self):
+    def test_bellman_ford_init_ver1(self):
         template("real_kernels", "bellmanFordInit_ver1")
