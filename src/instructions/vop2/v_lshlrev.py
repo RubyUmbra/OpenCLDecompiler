@@ -27,8 +27,9 @@ class VLshlrev(BaseInstruction):
             else:
                 new_value = make_op(self.node, self.src1, str(pow(2, int(self.src0))), "*", suffix=self.suffix)
                 reg_type = self.node.state.registers[self.src1].type
-            return set_reg_value(self.node, new_value, self.vdst, [self.src0, self.src1], self.suffix,
-                                 reg_type=reg_type)
+            return set_reg_value(
+                self.node, new_value, self.vdst, [self.src0, self.src1], self.suffix, reg_type=reg_type
+            )
         if self.suffix == "b64":
             start_to_register, end_to_register = check_and_split_regs(self.vdst)
             start_from_register, end_from_register = check_and_split_regs(self.src1)
@@ -40,9 +41,11 @@ class VLshlrev(BaseInstruction):
             reg_entire1 = Integrity.HIGH_PART
             if src0_flag and src1_flag:
                 reg_type = self.node.state.registers[start_from_register].type
-                if not (self.node.state.registers[start_from_register].type
-                        in [RegisterType.GLOBAL_ID_X, RegisterType.GLOBAL_ID_Y, RegisterType.GLOBAL_ID_Z]
-                        and self.node.state.registers[end_from_register].val == "0"):
+                if not (
+                    self.node.state.registers[start_from_register].type
+                    in [RegisterType.GLOBAL_ID_X, RegisterType.GLOBAL_ID_Y, RegisterType.GLOBAL_ID_Z]
+                    and self.node.state.registers[end_from_register].val == "0"
+                ):
                     new_value0 = self.node.state.registers[start_from_register]
                     new_value1 = self.node.state.registers[end_from_register]
             else:
@@ -56,9 +59,23 @@ class VLshlrev(BaseInstruction):
                 data_type = str(pow(2, int(self.src1))) + " bytes"
             elif src1_flag:
                 data_type = str(pow(2, int(self.src0))) + " bytes"
-            node = set_reg_value(self.node, new_value0, start_to_register, [start_from_register], data_type,
-                                 reg_type=reg_type, integrity=reg_entire0)
-            node = set_reg_value(node, new_value1, end_to_register, [end_from_register], data_type, reg_type=reg_type,
-                                 integrity=reg_entire1)
+            node = set_reg_value(
+                self.node,
+                new_value0,
+                start_to_register,
+                [start_from_register],
+                data_type,
+                reg_type=reg_type,
+                integrity=reg_entire0,
+            )
+            node = set_reg_value(
+                node,
+                new_value1,
+                end_to_register,
+                [end_from_register],
+                data_type,
+                reg_type=reg_type,
+                integrity=reg_entire1,
+            )
             return node
         return super().to_fill_node()

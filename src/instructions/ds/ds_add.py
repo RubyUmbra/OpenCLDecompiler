@@ -15,8 +15,9 @@ class DsAdd(BaseInstruction):
     def to_print_unresolved(self):
         if self.suffix == "u32":
             v = "V" + str(self.decompiler_data.number_of_v)
-            self.decompiler_data.write("uint* " + v + " = (uint*)(DS + ((" + self.addr + " + "
-                                       + str(self.offset) + ")&~3)) // ds_add_u32\n")
+            self.decompiler_data.write(
+                "uint* " + v + " = (uint*)(DS + ((" + self.addr + " + " + str(self.offset) + ")&~3)) // ds_add_u32\n"
+            )
             self.decompiler_data.write("*" + v + " = *" + v + " + " + self.vdata0 + "  // atomic operation\n")
             self.decompiler_data.number_of_v += 1
             return self.node

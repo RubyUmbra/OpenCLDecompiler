@@ -22,18 +22,18 @@ from src.utils import ConfigData, DriverFormat, Singleton
 
 
 def set_reg_value(  # pylint: disable=R0913
-        node,
-        new_value,
-        to_reg,
-        from_regs,
-        data_type,
-        exec_condition=None,
-        reg_type=RegisterType.UNKNOWN,
-        integrity=Integrity.ENTIRE,
-        register_content_type=RegisterContent,
-        sign: Union[RegisterSignType, list[RegisterSignType]] = RegisterSignType.POSITIVE,
-        operation: Optional[OperationType] = None,
-        size: Optional[list[int]] = None,
+    node,
+    new_value,
+    to_reg,
+    from_regs,
+    data_type,
+    exec_condition=None,
+    reg_type=RegisterType.UNKNOWN,
+    integrity=Integrity.ENTIRE,
+    register_content_type=RegisterContent,
+    sign: Union[RegisterSignType, list[RegisterSignType]] = RegisterSignType.POSITIVE,
+    operation: Optional[OperationType] = None,
+    size: Optional[list[int]] = None,
 ):
     decompiler_data = DecompilerData()
     if register_content_type == RegisterContent:
@@ -61,7 +61,7 @@ def set_reg_value(  # pylint: disable=R0913
                     )
                     for value, type_, sign_, data_type_, size_ in zip(new_value, reg_type, sign, data_type, size)
                 ]
-            )
+            ),
         )
     elif register_content_type == OperationRegisterContent:
         if not isinstance(sign, list):
@@ -76,7 +76,7 @@ def set_reg_value(  # pylint: disable=R0913
                             data_type=data_type,
                         )
                         for value, type_ in zip(new_value, reg_type)
-                    ]
+                    ],
                 ),
             )
         else:
@@ -93,7 +93,7 @@ def set_reg_value(  # pylint: disable=R0913
                                 data_type=data_type_,
                             )
                             for value, type_, sign_, data_type_ in zip(new_value, reg_type, sign, data_type)
-                        ]
+                        ],
                     ),
                 )
             else:
@@ -109,7 +109,7 @@ def set_reg_value(  # pylint: disable=R0913
                                 data_type=data_type,
                             )
                             for value, type_, sign_ in zip(new_value, reg_type, sign)
-                        ]
+                        ],
                     ),
                 )
     else:
@@ -124,10 +124,10 @@ def set_reg_value(  # pylint: disable=R0913
 
 
 def set_reg(
-        node,
-        to_reg: str,
-        from_regs: list[str],
-        reg: Register,
+    node,
+    to_reg: str,
+    from_regs: list[str],
+    reg: Register,
 ):
     return set_reg_value(
         node=node,
@@ -139,8 +139,12 @@ def set_reg(
         integrity=reg.integrity,
         sign=reg.register_content._sign,  # pylint: disable=W0212
         register_content_type=type(reg.register_content),
-        operation=reg.register_content._operation if isinstance(reg.register_content,  # pylint: disable=W0212
-                                                                OperationRegisterContent) else None,
+        operation=reg.register_content._operation
+        if isinstance(
+            reg.register_content,  # pylint: disable=W0212
+            OperationRegisterContent,
+        )
+        else None,
         size=reg.register_content._size,  # pylint: disable=W0212
     )
 
@@ -148,7 +152,7 @@ def set_reg(
 def make_elem_from_addr(var):
     separator_pos = var.find(" + ")
     param_name = var[:separator_pos]
-    index = var[separator_pos + 3:]
+    index = var[separator_pos + 3 :]
     var = param_name + "[" + index + "]"
     return var
 
@@ -186,7 +190,7 @@ def simplify_opencl_statement(opencl_line):
         close_bracket_position = opencl_line.find("]", start_close + 1)
         if open_bracket_position == -1:
             break
-        substring = opencl_line[open_bracket_position + 1:close_bracket_position]
+        substring = opencl_line[open_bracket_position + 1 : close_bracket_position]
         current_type_conversion = {}
         for key, data_type in decompiler_data.type_conversion.items():
             if data_type + key in substring:
@@ -202,14 +206,14 @@ def simplify_opencl_statement(opencl_line):
                 substring = substring.replace(key, data_type + key)
         # recover all left symbols from [
         if start_close == 0:
-            new_line += opencl_line[start_close:open_bracket_position + 1]
+            new_line += opencl_line[start_close : open_bracket_position + 1]
         else:
-            new_line += opencl_line[start_close + 1:open_bracket_position + 1]
+            new_line += opencl_line[start_close + 1 : open_bracket_position + 1]
         new_line += substring + "]"
         start_open = open_bracket_position
         start_close = close_bracket_position
     if start_close != 0:
-        new_line += opencl_line[start_close + 1:]
+        new_line += opencl_line[start_close + 1 :]
     else:
         new_line = opencl_line
     return new_line
@@ -221,7 +225,7 @@ def get_name(key):
     previous_position = position_gdata
     while position_gdata + 5 < len(key) and "0" <= key[position_gdata + 5] <= "9":
         position_gdata += 1
-    return key[previous_position:position_gdata + 5]
+    return key[previous_position : position_gdata + 5]
 
 
 def optimize_names_of_vars():
@@ -243,8 +247,10 @@ def optimize_names_of_vars():
 
 # TODO: разобраться, как перейти к общему случаю
 def check_big_values(node, start_register, end_register):
-    if node.state.registers[start_register].val == "0xa2000000" \
-            and node.state.registers[end_register].val == "0x426d1a94":
+    if (
+        node.state.registers[start_register].val == "0xa2000000"
+        and node.state.registers[end_register].val == "0x426d1a94"
+    ):
         return True, "1e12"
     return False, 0
 
@@ -302,7 +308,7 @@ def make_op(node, register0, register1, operation, type0="", type1="", suffix=""
 def evaluate_from_hex(global_data, size, flag):
     typed_global_data = []
     for element in range(int(len(global_data) / size)):
-        array_of_bytes = global_data[element * size: element * size + size]
+        array_of_bytes = global_data[element * size : element * size + size]
         string_of_bytes = "".join(elem[2:] + "" for elem in array_of_bytes)
         # output binascii.unhexlify is byteset from string; struct.unpack encode byte to value.
         value = struct.unpack(flag, binascii.unhexlify(string_of_bytes))[0]
@@ -405,7 +411,7 @@ class DecompilerData(metaclass=Singleton):  # pylint: disable=R0904, R0902
             "pc": 0,
             "scc": 0,
             "vcc": 0,
-            "exec": 0
+            "exec": 0,
         }
         self.names_of_vars = {}
         self.lds_vars = {}
@@ -516,7 +522,7 @@ class DecompilerData(metaclass=Singleton):  # pylint: disable=R0904, R0902
             "pc": 0,
             "scc": 0,
             "vcc": 0,
-            "exec": 0
+            "exec": 0,
         }
         self.names_of_vars = {}
         self.lds_vars = {}

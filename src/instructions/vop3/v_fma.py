@@ -12,8 +12,17 @@ class VFma(BaseInstruction):
 
     def to_print_unresolved(self):
         if self.suffix == "f32":
-            self.decompiler_data.write(self.vdst + " = " + "as_double(" + self.src0 + ") * as_double("
-                                       + self.src1 + ") + as_double(" + self.src2 + ") // v_fma_f32\n")
+            self.decompiler_data.write(
+                self.vdst
+                + " = "
+                + "as_double("
+                + self.src0
+                + ") * as_double("
+                + self.src1
+                + ") + as_double("
+                + self.src2
+                + ") // v_fma_f32\n"
+            )
             return self.node
         return super().to_print_unresolved()
 

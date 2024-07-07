@@ -6,7 +6,7 @@ class SMulk(BaseInstruction):
     def __init__(self, node, suffix):
         super().__init__(node, suffix)
         self.sdst = self.instruction[1]
-        self.simm16 = self.instruction[2][self.instruction[2].find("x") + 1:]
+        self.simm16 = self.instruction[2][self.instruction[2].find("x") + 1 :]
         self.unmodified_simm16 = self.instruction[2]
 
     def to_print_unresolved(self):

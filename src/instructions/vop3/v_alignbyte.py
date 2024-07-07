@@ -12,8 +12,16 @@ class VAlignbyte(BaseInstruction):
 
     def to_print_unresolved(self):
         if self.suffix == "b32":
-            self.decompiler_data.write(self.vdst + " = (((ulong)" + self.src0 + ") << 32) | " + self.src1
-                                       + ") >> ((" + self.src2 + " & 3) * 8) // v_alignbyte_b32\n")
+            self.decompiler_data.write(
+                self.vdst
+                + " = (((ulong)"
+                + self.src0
+                + ") << 32) | "
+                + self.src1
+                + ") >> (("
+                + self.src2
+                + " & 3) * 8) // v_alignbyte_b32\n"
+            )
             return self.node
         return super().to_print_unresolved()
 

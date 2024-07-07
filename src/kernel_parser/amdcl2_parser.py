@@ -35,13 +35,15 @@ def process_params(set_of_config: List[str]) -> List[KernelArgument]:
         for i in range(3):
             if name == f"_.global_offset_{i}":
                 name = f"get_global_offset({i})"
-        args.append(KernelArgument(
-            type_name=type_name,
-            name=name,
-            offset=offset,
-            size=size,
-            hidden=hidden,
-        ))
+        args.append(
+            KernelArgument(
+                type_name=type_name,
+                name=name,
+                offset=offset,
+                size=size,
+                hidden=hidden,
+            )
+        )
         offset += size
     return args
 
@@ -83,8 +85,13 @@ def parse_kernel(text):
         if ".kernel " in row:
             if status_of_parse == "instruction":
                 status_of_parse = "kernel"
-                yield (name_of_program, process_config(set_of_config), set_of_instructions,
-                       set_of_global_data_bytes, set_of_global_data_instruction)
+                yield (
+                    name_of_program,
+                    process_config(set_of_config),
+                    set_of_instructions,
+                    set_of_global_data_bytes,
+                    set_of_global_data_instruction,
+                )
                 set_of_instructions = []
                 set_of_config = []
             name_of_program = row.split()[1]
@@ -101,7 +108,11 @@ def parse_kernel(text):
         elif status_of_parse == "config":
             set_of_config.append(row)
         elif status_of_parse == "global_data":
-            set_of_global_data_bytes = \
-                get_global_data_bytes(row, set_of_global_data_bytes)
-    yield name_of_program, process_config(set_of_config), set_of_instructions, \
-        set_of_global_data_bytes, set_of_global_data_instruction
+            set_of_global_data_bytes = get_global_data_bytes(row, set_of_global_data_bytes)
+    yield (
+        name_of_program,
+        process_config(set_of_config),
+        set_of_instructions,
+        set_of_global_data_bytes,
+        set_of_global_data_instruction,
+    )

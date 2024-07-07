@@ -104,8 +104,11 @@ def process_unrolled_loops():  # pylint: disable=R0914
                             continue
                         counters2[(instruction, j)] = counters2.get((instruction, j), 0) + 1
 
-                counters2: list[tuple[str, int, int]] = [(name, num, cnt) for (name, num), cnt in counters2.items() if
-                                                         cnt >= unrolling_limit and cnt > len(chosen) // 2]
+                counters2: list[tuple[str, int, int]] = [
+                    (name, num, cnt)
+                    for (name, num), cnt in counters2.items()
+                    if cnt >= unrolling_limit and cnt > len(chosen) // 2
+                ]
                 counters2.sort(key=lambda x: x[2], reverse=True)
                 if len(counters2) == 0:
                     break

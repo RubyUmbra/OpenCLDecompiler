@@ -19,6 +19,7 @@ class VXor(BaseInstruction):
         if self.suffix == "b32":
             reg_entire = self.node.state.registers[self.src1].integrity
             new_value = make_op(self.node, self.src0, self.src1, "^", suffix=self.suffix)
-            return set_reg_value(self.node, new_value, self.vdst, [self.src0, self.src1], self.suffix,
-                                 integrity=reg_entire)
+            return set_reg_value(
+                self.node, new_value, self.vdst, [self.src0, self.src1], self.suffix, integrity=reg_entire
+            )
         return super().to_fill_node()

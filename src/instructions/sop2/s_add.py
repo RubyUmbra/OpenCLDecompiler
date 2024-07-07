@@ -4,10 +4,12 @@ from src.register import is_sgpr
 from src.register_type import RegisterType
 
 _instruction_special_cases = {
-    frozenset({
-        RegisterType[f"GLOBAL_OFFSET_{dim}"],
-        RegisterType[f"WORK_GROUP_ID_{dim}_LOCAL_SIZE"],
-    }): RegisterType[f"WORK_GROUP_ID_{dim}_LOCAL_SIZE_OFFSET"]
+    frozenset(
+        {
+            RegisterType[f"GLOBAL_OFFSET_{dim}"],
+            RegisterType[f"WORK_GROUP_ID_{dim}_LOCAL_SIZE"],
+        }
+    ): RegisterType[f"WORK_GROUP_ID_{dim}_LOCAL_SIZE_OFFSET"]
     for i, dim in enumerate("XYZ")
 }
 
@@ -23,7 +25,8 @@ class SAdd(BaseInstruction):
         if self.suffix in {"u32", "i32"}:
             temp = "temp" + str(self.decompiler_data.number_of_temp)
             self.decompiler_data.write(
-                f"ulong {temp} = (ulong){self.ssrc0} + (ulong){self.ssrc1} // {self.instruction[0]}\n")
+                f"ulong {temp} = (ulong){self.ssrc0} + (ulong){self.ssrc1} // {self.instruction[0]}\n"
+            )
             self.decompiler_data.write(self.sdst + " = " + temp + "\n")
             self.decompiler_data.write("scc = " + temp + " >> 32\n")
             self.decompiler_data.number_of_temp += 1
@@ -49,8 +52,11 @@ class SAdd(BaseInstruction):
             ssrc0_reg = is_sgpr(self.ssrc0)
             ssrc1_reg = is_sgpr(self.ssrc1)
             data_type = self.suffix
-            if self.ssrc1.isdigit() and ssrc0_reg and \
-                    self.node.state.registers[self.ssrc0].type == RegisterType.ARGUMENTS_POINTER:
+            if (
+                self.ssrc1.isdigit()
+                and ssrc0_reg
+                and self.node.state.registers[self.ssrc0].type == RegisterType.ARGUMENTS_POINTER
+            ):
                 assert self.node.state.registers[self.ssrc0].val.isdigit()
                 new_value = f"{int(self.node.state.registers[self.ssrc0].val) + int(self.ssrc1)}"
                 reg_type = RegisterType.ARGUMENTS_POINTER
@@ -95,6 +101,7 @@ class SAdd(BaseInstruction):
                     data_type = self.node.parent[0].state.registers[self.ssrc0].data_type
                 else:
                     data_type = self.node.state.registers[self.ssrc0].data_type
-            return set_reg_value(self.node, new_value, self.sdst, [self.ssrc0, self.ssrc1], data_type,
-                                 reg_type=reg_type)
+            return set_reg_value(
+                self.node, new_value, self.sdst, [self.ssrc0, self.ssrc1], data_type, reg_type=reg_type
+            )
         return super().to_fill_node()

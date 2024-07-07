@@ -11,12 +11,12 @@ from src.register_type import RegisterType
 
 class Register:
     def __init__(
-            self,
-            *,
-            integrity,
-            register_content: RegisterContent,
-            size: int = DEFAULT_REGISTER_SIZE,
-            exec_condition=None,
+        self,
+        *,
+        integrity,
+        register_content: RegisterContent,
+        size: int = DEFAULT_REGISTER_SIZE,
+        exec_condition=None,
     ):
         self.integrity: Integrity = integrity
         self.version = None
@@ -53,7 +53,7 @@ class Register:
         )
 
     def cast_to(self, data_type: str):
-        self.register_content._data_type = data_type   # pylint: disable=W0212
+        self.register_content._data_type = data_type  # pylint: disable=W0212
 
     def get_value(self) -> any:
         return self.register_content.get_value()
@@ -170,19 +170,22 @@ class Register:
                 size=self.get_size(),
             )
         elif isinstance(other, int):
-            from src.decompiler_data import DecompilerData   # pylint: disable=C0415
+            from src.decompiler_data import DecompilerData  # pylint: disable=C0415
+
             _MUL_SIMPLIFY_COMBINATIONS = [
                 *[
                     (
-                        frozenset({
-                            RegisterType[f"WORK_GROUP_ID_{dim}"],
-                            DecompilerData().config_data.size_of_work_groups[i],
-                        }),
+                        frozenset(
+                            {
+                                RegisterType[f"WORK_GROUP_ID_{dim}"],
+                                DecompilerData().config_data.size_of_work_groups[i],
+                            }
+                        ),
                         (
                             f"get_group_id({i}) * get_local_size({i})",
                             RegisterType[f"WORK_GROUP_ID_{dim}_LOCAL_SIZE"],
                             RegisterSignType.POSITIVE,
-                        )
+                        ),
                     )
                     for i, dim in enumerate("XYZ")
                 ]
@@ -203,7 +206,7 @@ class Register:
                                 type_=simplified_type,
                                 size=self.get_size(),
                                 sign=simplified_sign,
-                                data_type=self.get_data_type()
+                                data_type=self.get_data_type(),
                             ),
                             size=self.get_size(),
                         )
@@ -226,8 +229,8 @@ class Register:
         self.version = name_version + "_" + str(num_version + 1)
 
     def make_prev(self):
-        name_version = self.version[:self.version.find("_")]
-        num_version = self.version[self.version.find("_") + 1:]
+        name_version = self.version[: self.version.find("_")]
+        num_version = self.version[self.version.find("_") + 1 :]
         self.prev_version = [name_version + "_" + str(int(num_version) - 1)]
 
     def add_prev(self, prev_version):

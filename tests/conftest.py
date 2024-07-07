@@ -18,12 +18,12 @@ def check_and_set_pythonpath():
 
 
 def template(
-        path_to_dir: str,
-        dir_name: str,
-        flag: Optional[str] = None,
-        mcpu: str = "",
-        disasm: str = "clrxdisasm",
-        is_new_parser: bool = False,
+    path_to_dir: str,
+    dir_name: str,
+    flag: Optional[str] = None,
+    mcpu: str = "",
+    disasm: str = "clrxdisasm",
+    is_new_parser: bool = False,
 ):
     if mcpu:
         mcpu = f"-{mcpu}"
@@ -36,21 +36,15 @@ def template(
     flag_option = ["-f", flag] if flag else []
     new_parser_option = ["--new-parser"] if is_new_parser else []
 
-    DISASMS.get(disasm)(**{
-        "path_to_bin": path_to_bin,
-        "path_to_asm": path_to_asm,
-    }).invoke()
+    DISASMS.get(disasm)(
+        **{
+            "path_to_bin": path_to_bin,
+            "path_to_asm": path_to_asm,
+        }
+    ).invoke()
 
     subprocess.run(
-        [
-            "python",
-            path_to_exec_file,
-            "-i",
-            path_to_asm,
-            "-o",
-            path_to_cl
-        ] + flag_option + new_parser_option,
-        check=True
+        ["python", path_to_exec_file, "-i", path_to_asm, "-o", path_to_cl] + flag_option + new_parser_option, check=True
     )
 
     hands = test_root / f"{dir_name}_hands.cl"

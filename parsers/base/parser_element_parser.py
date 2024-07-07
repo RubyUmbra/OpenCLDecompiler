@@ -9,8 +9,8 @@ from parsers.parse_objects.base.string_parse_object import StringParseObject
 
 class ParserElementParser(BaseParser):
     def __init__(
-            self,
-            parser_element: ParserElement,
+        self,
+        parser_element: ParserElement,
     ):
         self._raw_parser_element = parser_element
         self._parser_element = Combine(parser_element)
@@ -18,7 +18,7 @@ class ParserElementParser(BaseParser):
         self._parser_element.set_parse_action(
             lambda s, loc, tokens: (
                 tokens[0],
-                s[(loc + len(tokens[0])):],
+                s[(loc + len(tokens[0])) :],
             )
         )
 

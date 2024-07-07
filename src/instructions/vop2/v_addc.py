@@ -21,12 +21,14 @@ class VAddc(BaseInstruction):
             cc = "cc" + str(self.decompiler_data.number_of_cc)
             self.decompiler_data.write("ulong " + mask + " = (1ULL<<LANEID) // v_addc_u32\n")
             self.decompiler_data.write("uchar " + cc + " = ((" + self.ssrc2 + "&" + mask + " ? 1 : 0)\n")
-            self.decompiler_data.write("uint " + temp + " = (ulong)" + self.src0
-                                       + " + (ulong)" + self.src1 + " + " + cc + "\n")
+            self.decompiler_data.write(
+                "uint " + temp + " = (ulong)" + self.src0 + " + (ulong)" + self.src1 + " + " + cc + "\n"
+            )
             self.decompiler_data.write(self.sdst + " = 0\n")
             self.decompiler_data.write(self.vdst + " = CLAMP ? min(" + temp + ", 0xffffffff) : " + temp + "\n")
-            self.decompiler_data.write(self.sdst + " = (" + self.sdst + "&~" + mask + ") | (("
-                                       + temp + " >> 32) ? " + mask + " : 0)\n")
+            self.decompiler_data.write(
+                self.sdst + " = (" + self.sdst + "&~" + mask + ") | ((" + temp + " >> 32) ? " + mask + " : 0)\n"
+            )
             self.decompiler_data.number_of_temp += 1
             self.decompiler_data.number_of_mask += 1
             self.decompiler_data.number_of_cc += 1
@@ -62,8 +64,10 @@ class VAddc(BaseInstruction):
                     reg_entire = self.node.state.registers[self.src1].integrity
                 else:
                     reg_entire = self.node.state.registers[self.src1].integrity
-                    if self.node.state.registers[self.src0].type == RegisterType.ADDRESS_KERNEL_ARGUMENT \
-                            and self.node.state.registers[self.src1].type == RegisterType.GLOBAL_ID_X:
+                    if (
+                        self.node.state.registers[self.src0].type == RegisterType.ADDRESS_KERNEL_ARGUMENT
+                        and self.node.state.registers[self.src1].type == RegisterType.GLOBAL_ID_X
+                    ):
                         new_value = self.node.state.registers[self.src0].val + "[get_global_id(0)]"
                         reg_type = RegisterType.ADDRESS_KERNEL_ARGUMENT_ELEMENT
             else:
@@ -72,6 +76,13 @@ class VAddc(BaseInstruction):
                     reg_type = self.node.state.registers[self.src0].type
                 if src1_reg:
                     reg_type = self.node.state.registers[self.src1].type
-            return set_reg_value(self.node, new_value, self.vdst, [self.src0, self.src1], self.suffix,
-                                 reg_type=reg_type, integrity=reg_entire)
+            return set_reg_value(
+                self.node,
+                new_value,
+                self.vdst,
+                [self.src0, self.src1],
+                self.suffix,
+                reg_type=reg_type,
+                integrity=reg_entire,
+            )
         return super().to_fill_node()

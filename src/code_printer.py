@@ -19,7 +19,7 @@ def create_opencl_body():
             if var in decompiler_data.address_params:
                 var = "*" + var
             if "___" in var:
-                var = var[:var.find("___")]
+                var = var[: var.find("___")]
             decompiler_data.write("    " + type_of_var + " " + var + ";\n")
     offsets = list(decompiler_data.lds_vars.keys())
     offsets.append(decompiler_data.config_data.local_size)
@@ -27,8 +27,16 @@ def create_opencl_body():
     for key in range(len(offsets) - 1):
         size_var = int((offsets[key + 1] - offsets[key]) / (int(decompiler_data.lds_vars[offsets[key]][1][1:]) / 8))
         type_of_var = make_opencl_type(decompiler_data.lds_vars[offsets[key]][1])
-        decompiler_data.write("    __local " + type_of_var + " " + decompiler_data.lds_vars[offsets[key]][0]
-                              + "[" + str(size_var) + "]" + ";\n")
+        decompiler_data.write(
+            "    __local "
+            + type_of_var
+            + " "
+            + decompiler_data.lds_vars[offsets[key]][0]
+            + "["
+            + str(size_var)
+            + "]"
+            + ";\n"
+        )
     make_output_from_region(decompiler_data.improve_cfg, "    ")
     decompiler_data.write("}\n")
 
@@ -75,7 +83,7 @@ def write_global_data():
 def make_output_for_loop_vars(curr_node, indent):
     decompiler_data = DecompilerData()
     key = decompiler_data.loops_nodes_for_variables[curr_node]
-    reg = key[:key.find("_")]
+    reg = key[: key.find("_")]
     loop_variable = decompiler_data.loops_variables[key]
     decompiler_data.write(indent + loop_variable + " = " + curr_node.state.registers[reg].val + ";\n")
 
@@ -93,16 +101,24 @@ def make_output_for_linear_region(region, indent):
                 make_output_for_loop_vars(curr_node, indent)
             elif new_output != "" and new_output is not None:
                 decompiler_data.write(indent + new_output + ";\n")
-            if len(curr_node.instruction) > 1 and is_reg(curr_node.instruction[1]) and \
-                    not decompiler_data.loops_nodes_for_variables.get(curr_node):
+            if (
+                len(curr_node.instruction) > 1
+                and is_reg(curr_node.instruction[1])
+                and not decompiler_data.loops_nodes_for_variables.get(curr_node)
+            ):
                 reg = curr_node.instruction[1]
 
                 version = curr_node.state.registers[reg].version
                 var = decompiler_data.variables.get(version)
-                if var is not None and var != curr_node.state.registers[reg].val and \
-                        curr_node.state.registers[reg].val.strip() != "" and (
-                        "cmp" not in curr_node.instruction[0] or
-                        decompiler_data.gpu and decompiler_data.gpu.startswith("gfx")
+                if (
+                    var is not None
+                    and var != curr_node.state.registers[reg].val
+                    and curr_node.state.registers[reg].val.strip() != ""
+                    and (
+                        "cmp" not in curr_node.instruction[0]
+                        or decompiler_data.gpu
+                        and decompiler_data.gpu.startswith("gfx")
+                    )
                 ):  # версия поменялась по сравнению с предком
                     decompiler_data.write(indent + var + " = " + curr_node.state.registers[reg].val + ";\n")
             if curr_node == region.end:

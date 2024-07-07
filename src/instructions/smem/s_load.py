@@ -20,13 +20,15 @@ class SLoad(BaseInstruction):
             return self.node
         if self.suffix == "dwordx2":
             self.decompiler_data.write(
-                self.sdata + " = *(ulong*)(smem + (" + self.offset + " & ~3)) // s_load_dwordx2\n")
+                self.sdata + " = *(ulong*)(smem + (" + self.offset + " & ~3)) // s_load_dwordx2\n"
+            )
             return self.node
         if self.suffix in ["dwordx4", "dwordx8"]:
             i_cnt = self.suffix[-1]
             self.decompiler_data.write("for (BYTE i = 0; i < " + i_cnt + "; i++) // s_load_dword" + i_cnt + "\n")
             self.decompiler_data.write(
-                "    " + self.sdata + "[i] = *(uint*)(SMEM + i*4 + (" + self.offset + " & ~3))\n")
+                "    " + self.sdata + "[i] = *(uint*)(SMEM + i*4 + (" + self.offset + " & ~3))\n"
+            )
             return self.node
         return super().to_print_unresolved()
 

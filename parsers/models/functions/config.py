@@ -3,8 +3,8 @@ from ..model import Model
 
 class Config(Model):
     def __init__(
-            self,
-            config: any,
+        self,
+        config: any,
     ):
         self._config = config
 

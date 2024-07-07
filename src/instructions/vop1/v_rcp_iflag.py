@@ -19,6 +19,7 @@ class VRcpIflag(BaseInstruction):
         if self.suffix == "f32":
             data_type = self.suffix
             new_value = self.node.state.registers[self.src0].val
-            return set_reg_value(self.node, new_value, self.vdst, [self.src0], data_type,
-                                 reg_type=RegisterType.DIVISION_RECIPROCAL)
+            return set_reg_value(
+                self.node, new_value, self.vdst, [self.src0], data_type, reg_type=RegisterType.DIVISION_RECIPROCAL
+            )
         return super().to_fill_node()

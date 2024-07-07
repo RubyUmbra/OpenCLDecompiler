@@ -28,7 +28,8 @@ vector_type_dict = {
     "float8": "float8",
     "half2": "half2",
     "half4": "half4",
-    "half8": "half8"}
+    "half8": "half8",
+}
 
 asm_to_opencl_scalar_dict = {
     "u32": "uint",

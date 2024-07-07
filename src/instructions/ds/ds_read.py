@@ -12,12 +12,14 @@ class DsRead(BaseInstruction):
 
     def to_print_unresolved(self):
         if self.suffix == "b32":
-            self.decompiler_data.write(self.vdst + " = *(uint*)(DS + ((" + self.addr + " + "
-                                       + str(self.offset) + ")&~3)) // ds_read_b32\n")
+            self.decompiler_data.write(
+                self.vdst + " = *(uint*)(DS + ((" + self.addr + " + " + str(self.offset) + ")&~3)) // ds_read_b32\n"
+            )
             return self.node
         if self.suffix == "b64":
-            self.decompiler_data.write(self.vdst + " = *(ulong*)(DS + ((" + self.addr + " + "
-                                       + str(self.offset) + ")&~7)) // ds_read_b64\n")
+            self.decompiler_data.write(
+                self.vdst + " = *(ulong*)(DS + ((" + self.addr + " + " + str(self.offset) + ")&~7)) // ds_read_b64\n"
+            )
             return self.node
         return super().to_print_unresolved()
 

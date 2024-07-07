@@ -25,7 +25,8 @@ class VCmp(BaseInstruction):
         if self.suffix in ["i16", "i32", "i64", "u16", "u32", "u64", "f16", "f32", "f64"]:
             datatype = f"({make_opencl_type(self.suffix)})"
             self.decompiler_data.write(
-                f"{self.d0}[laneId] = {datatype}{self.s0} {self.op} {datatype}{self.s1} // {self.name}\n")
+                f"{self.d0}[laneId] = {datatype}{self.s0} {self.op} {datatype}{self.s1} // {self.name}\n"
+            )
             return self.node
         return super().to_print_unresolved()
 

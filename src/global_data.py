@@ -7,7 +7,7 @@ def get_gdata_offset(instruction):
     if position == -1:
         return 0
     end_position = instruction.find(")", position)
-    return int(instruction[position + 8:end_position])
+    return int(instruction[position + 8 : end_position])
 
 
 def gdata_type_processing():
@@ -40,5 +40,6 @@ def process_global_data(set_of_global_data_instruction, set_of_global_data_bytes
     list_of_indexes = list(sorted(indexes))
     list_of_indexes.append(-1)
     for index in range(len(list_of_indexes) - 1):
-        decompiler_data.global_data["gdata" + str(list_of_indexes[index])] = \
-            set_of_global_data_bytes[list_of_indexes[index]:list_of_indexes[index + 1]]
+        decompiler_data.global_data["gdata" + str(list_of_indexes[index])] = set_of_global_data_bytes[
+            list_of_indexes[index] : list_of_indexes[index + 1]
+        ]

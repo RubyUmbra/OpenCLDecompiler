@@ -8,7 +8,6 @@ from parsers.parse_objects.base.list_parse_object import ListParseObject
 
 
 class AmdGpuDisLineParser(BaseParser):
-
     def parse(self, text: str) -> Optional[tuple[ParseObject, str]]:
         parse_result = LineParser(AnyParser()).parse(text)
         if parse_result is None:

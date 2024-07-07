@@ -18,7 +18,7 @@ class ExecCondition:
             assert self.and_chain[-1] == self.make_not(other.and_chain[-1])
             return ExecCondition(self.and_chain[:-1:])
         assert len(self.and_chain) > len(other.and_chain)
-        assert self.and_chain[:len(other.and_chain)] == other.and_chain
+        assert self.and_chain[: len(other.and_chain)] == other.and_chain
         return ExecCondition(other.and_chain[::])
 
     def __xor__(self, other: "ExecCondition") -> "ExecCondition":
@@ -46,9 +46,9 @@ class ExecCondition:
         return ExecCondition([ExecCondition.DEFAULT])
 
     @staticmethod
-    def is_closing_for(end_exec_condition: "ExecCondition",
-                       if_exec_condition: "ExecCondition") -> bool:
+    def is_closing_for(end_exec_condition: "ExecCondition", if_exec_condition: "ExecCondition") -> bool:
         end_len = len(end_exec_condition.and_chain)
-        return len(if_exec_condition.and_chain) > end_len \
-            and if_exec_condition.and_chain[:end_len] \
-            == end_exec_condition.and_chain
+        return (
+            len(if_exec_condition.and_chain) > end_len
+            and if_exec_condition.and_chain[:end_len] == end_exec_condition.and_chain
+        )

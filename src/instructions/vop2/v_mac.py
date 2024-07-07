@@ -12,7 +12,8 @@ class VMac(BaseInstruction):
     def to_print_unresolved(self):
         if self.suffix == "f32":
             self.decompiler_data.write(
-                f"{self.vdst} = (float){self.src0} * (float){self.src1} + (float){self.vdst} // {self.name}\n")
+                f"{self.vdst} = (float){self.src0} * (float){self.src1} + (float){self.vdst} // {self.name}\n"
+            )
             return self.node
         return super().to_print_unresolved()
 

@@ -14,14 +14,16 @@ class VLshrrev(BaseInstruction):
 
     def to_print_unresolved(self):
         if self.suffix == "b64":
-            self.decompiler_data.write(self.vdst + " = " + self.src1 + " >> ("
-                                       + self.src0 + " & 63) // v_lshrrev_b64\n")
+            self.decompiler_data.write(
+                self.vdst + " = " + self.src1 + " >> (" + self.src0 + " & 63) // v_lshrrev_b64\n"
+            )
             return self.node
         return super().to_print_unresolved()
 
     def to_fill_node(self):
         if self.suffix in ["b32"]:
             if is_reg(self.src1):
+
                 def default_behaviour():
                     new_value = make_op(self.node, self.src1, str(pow(2, int(self.src0))), "//", suffix=self.suffix)
                     reg_type = self.node.state.registers[self.src1].type

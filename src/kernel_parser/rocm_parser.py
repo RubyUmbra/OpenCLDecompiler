@@ -47,13 +47,15 @@ def get_params(set_of_config: List[str]) -> List[KernelArgument]:
             if value_kind == global_offset_kind:
                 name = f"get_global_offset({i})"
                 type_name = "long"
-        args.append(KernelArgument(
-            type_name=type_name,
-            name=name,
-            offset=offset,
-            size=size,
-            hidden=hidden,
-        ))
+        args.append(
+            KernelArgument(
+                type_name=type_name,
+                name=name,
+                offset=offset,
+                size=size,
+                hidden=hidden,
+            )
+        )
         offset += size
     return args
 
@@ -79,7 +81,7 @@ def parse_common_configuration(lines: List[str]) -> List[str]:
 
 def split_configurations_and_text(lines: List[str]) -> Tuple[List[str], List[str]]:
     index: int = lines.index(".text")
-    return lines[:index], lines[index + 1:]
+    return lines[:index], lines[index + 1 :]
 
 
 def split_kernels_configurations(lines: List[str]) -> Dict[str, List[str]]:
@@ -123,7 +125,7 @@ def parse_kernel(text: List[str]):
     lines: List[str] = [line.strip() for line in text]
 
     common_configuration: List[str] = parse_common_configuration(lines)
-    configurations, text = split_configurations_and_text(lines[len(common_configuration):])
+    configurations, text = split_configurations_and_text(lines[len(common_configuration) :])
 
     kernels_configurations: Dict[str, List[str]] = split_kernels_configurations(configurations)
     kernels_texts = split_kernels_texts(text, set(kernels_configurations.keys()))
@@ -133,5 +135,10 @@ def parse_kernel(text: List[str]):
 
     for name_of_program, set_of_instructions in kernels_texts.items():
         config_data = process_config(kernels_configurations[name_of_program])
-        yield name_of_program, config_data, set_of_instructions, \
-            set_of_global_data_bytes, set_of_global_data_instruction
+        yield (
+            name_of_program,
+            config_data,
+            set_of_instructions,
+            set_of_global_data_bytes,
+            set_of_global_data_instruction,
+        )

@@ -11,8 +11,9 @@ class SCselect(BaseInstruction):
 
     def to_print_unresolved(self):
         if self.suffix == "b64":
-            self.decompiler_data.write(self.sdst + " = scc ? " + self.ssrc0 + " : "
-                                       + self.ssrc1 + " // s_cselect_b64\n")
+            self.decompiler_data.write(
+                self.sdst + " = scc ? " + self.ssrc0 + " : " + self.ssrc1 + " // s_cselect_b64\n"
+            )
             return self.node
         return super().to_print_unresolved()
 

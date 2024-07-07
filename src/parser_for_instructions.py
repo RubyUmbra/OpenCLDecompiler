@@ -14,9 +14,11 @@ CONTEXT = get_context()
 
 
 def main(input_par, output_par, flag_for_decompilation, cfg_path, is_new_parser: bool, unrolling_limit=16):
-    CONTEXT.update(**{
-        f"{CONTROL_FLOW_GRAPH_ENABLED_CONTEXT_KEY}": cfg_path is not None,
-    })
+    CONTEXT.update(
+        **{
+            f"{CONTROL_FLOW_GRAPH_ENABLED_CONTEXT_KEY}": cfg_path is not None,
+        }
+    )
 
     if CONTEXT.get(CONTROL_FLOW_GRAPH_ENABLED_CONTEXT_KEY):
         ControlFlowGraph(
@@ -28,7 +30,6 @@ def main(input_par, output_par, flag_for_decompilation, cfg_path, is_new_parser:
         )
 
     with open(output_par, "w", encoding="utf-8") as output_file:
-
         with open(input_par, "r", encoding="utf-8") as file:
             body_of_file = file.read()
 
@@ -55,9 +56,14 @@ def create_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument("-i", "--input", help="path to .asm input file")
     parser.add_argument("-o", "--output", help="path to .cl output file")
-    parser.add_argument("-f", "--flag", help="approach to parse", nargs="?",
-                        choices=["AUTO_DECOMPILATION", "ONLY_OPENCL", "ONLY_CLRX"],
-                        default="AUTO_DECOMPILATION")
+    parser.add_argument(
+        "-f",
+        "--flag",
+        help="approach to parse",
+        nargs="?",
+        choices=["AUTO_DECOMPILATION", "ONLY_OPENCL", "ONLY_CLRX"],
+        default="AUTO_DECOMPILATION",
+    )
     parser.add_argument("--new-parser", action="store_true")
     parser.add_argument("--cfg", help="path to output control flow graph")
     parser.add_argument("--unrolling_limit", help="number of repeations to recognize unrolled loop", default=16)
@@ -75,8 +81,14 @@ def start_point():
               'python parser_for_instructions.py -i <input_file.asm> -o <output_file.cl>'
             """)
     else:
-        main(namespace.input, namespace.output, namespace.flag, namespace.cfg, namespace.new_parser,
-             namespace.unrolling_limit)
+        main(
+            namespace.input,
+            namespace.output,
+            namespace.flag,
+            namespace.cfg,
+            namespace.new_parser,
+            namespace.unrolling_limit,
+        )
 
 
 if __name__ == "__main__":

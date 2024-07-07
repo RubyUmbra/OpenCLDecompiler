@@ -15,11 +15,13 @@ class VSubNc(BaseInstruction):
     def to_print_unresolved(self):
         if self.suffix == "u32":
             self.decompiler_data.write(
-                f"{self.vdst} = (uint){self.src0} - (uint){self.src1} // {self.instruction[0]}\n")
+                f"{self.vdst} = (uint){self.src0} - (uint){self.src1} // {self.instruction[0]}\n"
+            )
             return self.node
         if self.suffix == "u16":
             self.decompiler_data.write(
-                f"{self.vdst} = (ushort){self.src0} - (ushort){self.src1} // {self.instruction[0]}\n")
+                f"{self.vdst} = (ushort){self.src0} - (ushort){self.src1} // {self.instruction[0]}\n"
+            )
             return self.node
         return super().to_print_unresolved()
 
@@ -31,10 +33,12 @@ class VSubNc(BaseInstruction):
             reg_type = self.node.state.registers[self.src1].integrity
         if self.suffix == "u32":
             new_value = make_op(self.node, self.src0, self.src1, "-", "(uint)", "(uint)", suffix=self.suffix)
-            return set_reg_value(self.node, new_value, self.vdst, [self.src0, self.src1], self.suffix,
-                                 reg_type=reg_type)
+            return set_reg_value(
+                self.node, new_value, self.vdst, [self.src0, self.src1], self.suffix, reg_type=reg_type
+            )
         if self.suffix == "u16":
             new_value = make_op(self.node, self.src0, self.src1, "-", "(ushort)", "(ushort)", suffix=self.suffix)
-            return set_reg_value(self.node, new_value, self.vdst, [self.src0, self.src1], self.suffix,
-                                 reg_type=reg_type)
+            return set_reg_value(
+                self.node, new_value, self.vdst, [self.src0, self.src1], self.suffix, reg_type=reg_type
+            )
         return super().to_fill_node()

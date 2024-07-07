@@ -14,8 +14,9 @@ class SAddc(BaseInstruction):
     def to_print_unresolved(self):
         if self.suffix == "u32":
             temp = "temp" + str(self.decompiler_data.number_of_temp)
-            self.decompiler_data.write("ulong " + temp + " = (ulong)" + self.ssrc0
-                                       + " + (ulong)" + self.ssrc1 + " + scc // s_addc_u32\n")
+            self.decompiler_data.write(
+                "ulong " + temp + " = (ulong)" + self.ssrc0 + " + (ulong)" + self.ssrc1 + " + scc // s_addc_u32\n"
+            )
             self.decompiler_data.write(self.sdst + " = " + temp + "\n")
             self.decompiler_data.write("scc = " + temp + " >> 32\n")
             self.decompiler_data.number_of_temp += 1
@@ -56,6 +57,7 @@ class SAddc(BaseInstruction):
                     else:
                         data_type = self.node.state.registers[self.ssrc0].data_type
                     reg_type = self.node.state.registers[self.ssrc0].type
-            return set_reg_value(self.node, new_value, self.sdst, [self.ssrc0, self.ssrc1], data_type,
-                                 reg_type=reg_type)
+            return set_reg_value(
+                self.node, new_value, self.sdst, [self.ssrc0, self.ssrc1], data_type, reg_type=reg_type
+            )
         return super().to_fill_node()

@@ -27,8 +27,14 @@ class SAnd(BaseInstruction):
 
                 new_exec_condition = old_exec_condition & new_cond
                 self.decompiler_data.exec_registers[self.ssrc0] = new_exec_condition
-                return set_reg_value(self.node, new_exec_condition.top(), self.sdst, [self.ssrc0, self.ssrc1], None,
-                                     exec_condition=new_exec_condition)
+                return set_reg_value(
+                    self.node,
+                    new_exec_condition.top(),
+                    self.sdst,
+                    [self.ssrc0, self.ssrc1],
+                    None,
+                    exec_condition=new_exec_condition,
+                )
             if self.ssrc0 in self.node.state.registers and self.ssrc1 in self.node.state.registers:
                 ssrc0 = self.node.state.registers[self.ssrc0]
                 return set_reg_value(
@@ -38,7 +44,7 @@ class SAnd(BaseInstruction):
                     from_regs=[self.ssrc0, self.ssrc1],
                     data_type=self.suffix,
                     reg_type=ssrc0.type,
-                    integrity=ssrc0.integrity
+                    integrity=ssrc0.integrity,
                 )
             if self.ssrc0 in self.node.state.registers:
                 reg = self.node.state.registers[self.ssrc0]
@@ -52,7 +58,7 @@ class SAnd(BaseInstruction):
                 from_regs=[self.ssrc0, self.ssrc1],
                 data_type=self.suffix,
                 reg_type=reg.type,
-                integrity=reg.integrity
+                integrity=reg.integrity,
             )
         return super().to_fill_node()
 

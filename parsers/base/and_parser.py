@@ -7,8 +7,8 @@ from parsers.parse_objects.base import ParseObject
 
 class AndParser(BaseParser):
     def __init__(
-            self,
-            *parsers: BaseParser,
+        self,
+        *parsers: BaseParser,
     ):
         self._parsers = parsers
 

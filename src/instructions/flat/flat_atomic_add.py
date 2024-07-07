@@ -12,11 +12,28 @@ class FlatAtomicAdd(BaseInstruction):
     def to_print_unresolved(self):
         vm = "vm" + str(self.decompiler_data.number_of_vm)
         p = "p" + str(self.decompiler_data.number_of_p)
-        self.decompiler_data.write("uint* " + vm + " = (uint*)(" + self.vaddr + " + "
-                                   + self.inst_offset + ") // flat_atomic_add\n")
         self.decompiler_data.write(
-            "uint " + p + " = *" + vm + "; *" + vm + " = *" + vm + " + " + self.vdata + "; "
-            + self.vdst + " = (glc) ? " + p + " : " + self.vdst + "  // atomic\n")
+            "uint* " + vm + " = (uint*)(" + self.vaddr + " + " + self.inst_offset + ") // flat_atomic_add\n"
+        )
+        self.decompiler_data.write(
+            "uint "
+            + p
+            + " = *"
+            + vm
+            + "; *"
+            + vm
+            + " = *"
+            + vm
+            + " + "
+            + self.vdata
+            + "; "
+            + self.vdst
+            + " = (glc) ? "
+            + p
+            + " : "
+            + self.vdst
+            + "  // atomic\n"
+        )
         self.decompiler_data.number_of_vm += 1
         self.decompiler_data.number_of_p += 1
         return self.node

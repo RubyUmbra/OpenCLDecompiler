@@ -33,8 +33,9 @@ class SLshl(BaseInstruction):
                 reg_type = RegisterType.WORK_GROUP_ID_Z_LOCAL_SIZE
             else:
                 reg_type = self.node.state.registers[self.ssrc0].type
-            return set_reg_value(self.node, new_value, self.sdst, [self.ssrc0, self.ssrc1], self.suffix,
-                                 reg_type=reg_type)
+            return set_reg_value(
+                self.node, new_value, self.sdst, [self.ssrc0, self.ssrc1], self.suffix, reg_type=reg_type
+            )
         if self.suffix == "b64":
             start_to_register, end_to_register = check_and_split_regs(self.sdst)
             start_from_register, end_from_register = check_and_split_regs(self.ssrc0)
@@ -47,10 +48,17 @@ class SLshl(BaseInstruction):
                 data_type = "8 bytes"
             elif self.ssrc1 == "2":
                 data_type = "4 bytes"
-            node = set_reg_value(self.node, new_value0, start_to_register, [start_from_register, self.ssrc1], data_type,
-                                 reg_type=reg_type0)
-            node = set_reg_value(node, new_value1, end_to_register, [end_from_register, self.ssrc1], data_type,
-                                 reg_type=reg_type1)
+            node = set_reg_value(
+                self.node,
+                new_value0,
+                start_to_register,
+                [start_from_register, self.ssrc1],
+                data_type,
+                reg_type=reg_type0,
+            )
+            node = set_reg_value(
+                node, new_value1, end_to_register, [end_from_register, self.ssrc1], data_type, reg_type=reg_type1
+            )
             return node
 
         if self.decompiler_data.is_rdna3:

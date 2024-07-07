@@ -23,8 +23,19 @@ class SBfe(BaseInstruction):
             self.decompiler_data.write("if (" + length + "==0)\n")
             self.decompiler_data.write(tab + self.sdst + " = 0\n")
             self.decompiler_data.write("if (" + shift + " + " + length + " < 32)\n")
-            self.decompiler_data.write(tab + self.sdst + " = " + self.ssrc0 + " << (32 - " + shift + " - " + length
-                                       + ") >> (32 - " + length + ")\n")
+            self.decompiler_data.write(
+                tab
+                + self.sdst
+                + " = "
+                + self.ssrc0
+                + " << (32 - "
+                + shift
+                + " - "
+                + length
+                + ") >> (32 - "
+                + length
+                + ")\n"
+            )
             self.decompiler_data.write("else\n")
             self.decompiler_data.write(tab + self.sdst + " = " + self.ssrc0 + " >> " + shift + "\n")
             self.decompiler_data.write("scc = " + self.sdst + " != 0\n")
@@ -37,8 +48,19 @@ class SBfe(BaseInstruction):
             self.decompiler_data.write("if (" + length + "==0)\n")
             self.decompiler_data.write(tab + self.sdst + " = 0\n")
             self.decompiler_data.write("if (" + shift + " + " + length + " < 32)\n")
-            self.decompiler_data.write(tab + self.sdst + " = (int)" + self.ssrc0 + " << (32 - " + shift + " - " + length
-                                       + ") >> (32 - " + length + ")\n")
+            self.decompiler_data.write(
+                tab
+                + self.sdst
+                + " = (int)"
+                + self.ssrc0
+                + " << (32 - "
+                + shift
+                + " - "
+                + length
+                + ") >> (32 - "
+                + length
+                + ")\n"
+            )
             self.decompiler_data.write("else\n")
             self.decompiler_data.write(tab + self.sdst + " = (int)" + self.ssrc0 + " >> " + shift + "\n")
             self.decompiler_data.write("scc = " + self.sdst + " != 0\n")
@@ -50,8 +72,9 @@ class SBfe(BaseInstruction):
     def to_fill_node(self):
         if self.decompiler_data.is_rdna3:
             if self.suffix.endswith("32"):
-                if is_reg(self.ssrc0) \
-                        and isinstance(self.node.state.registers[self.ssrc0].register_content, CombinedRegisterContent):
+                if is_reg(self.ssrc0) and isinstance(
+                    self.node.state.registers[self.ssrc0].register_content, CombinedRegisterContent
+                ):
                     shift_by = int(self.ssrc1, 16) & ((1 << 4) - 1)
                     and_by = hex((1 << ((int(self.ssrc1, 16) >> 16) & ((1 << 6) - 1))) - 1)
 

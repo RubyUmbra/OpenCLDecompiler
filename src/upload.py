@@ -11,7 +11,7 @@ usesetup_dict = {
         register_content=RegisterContent(
             value="",
             type_=RegisterType.GENERAL_SETUP,
-        )
+        ),
     ),
     #  TODO: Подумать, как лучше вписать, что здесь и LOCAL_SIZE_X, и LOCAL_SIZE_Y
     "0x4": Register(
@@ -19,42 +19,42 @@ usesetup_dict = {
         register_content=RegisterContent(
             value="get_local_size(0)",
             type_=RegisterType.LOCAL_SIZE_X,
-        )
+        ),
     ),
     "0x8": Register(
         integrity=Integrity.ENTIRE,
         register_content=RegisterContent(
             value="get_local_size(2)",
             type_=RegisterType.LOCAL_SIZE_Z,
-        )
+        ),
     ),
     "0xc": Register(
         integrity=Integrity.ENTIRE,
         register_content=RegisterContent(
             value="get_global_size(0)",
             type_=RegisterType.GLOBAL_SIZE_X,
-        )
+        ),
     ),
     "0x10": Register(
         integrity=Integrity.ENTIRE,
         register_content=RegisterContent(
             value="get_global_size(1)",
             type_=RegisterType.GLOBAL_SIZE_Y,
-        )
+        ),
     ),
     "0x14": Register(
         integrity=Integrity.ENTIRE,
         register_content=RegisterContent(
             value="get_global_size(2)",
             type_=RegisterType.GLOBAL_SIZE_Z,
-        )
+        ),
     ),
     "0x18": Register(
         integrity=Integrity.ENTIRE,
         register_content=RegisterContent(
             value="",
             type_=RegisterType.UNKNOWN,
-        )
+        ),
     ),
 }
 
@@ -122,10 +122,10 @@ def upload_global_data_pointer(state, to_registers, from_registers):
 
 
 def upload_by_offset(
-        state,
-        to_registers: str,
-        offset: str,
-        bits: int = -1,
+    state,
+    to_registers: str,
+    offset: str,
+    bits: int = -1,
 ):
     decompiler_data = DecompilerData()
     start_to_register, end_to_register = check_and_split_regs(to_registers)
@@ -134,9 +134,7 @@ def upload_by_offset(
 
     state.registers[curr_to_register] = Register(
         integrity=Integrity.ENTIRE,
-        register_content=CombinedRegisterContent(
-            register_contents=[]
-        ),
+        register_content=CombinedRegisterContent(register_contents=[]),
     )
 
     while True:
@@ -152,21 +150,22 @@ def upload_by_offset(
 
         register_content = decompiler_data.config_data.offset_to_content[offset]
         if (
-                state.registers[curr_to_register].register_content.get_size() + register_content.get_size() <
-                state.registers[curr_to_register].get_size()
+            state.registers[curr_to_register].register_content.get_size() + register_content.get_size()
+            < state.registers[curr_to_register].get_size()
         ) or (
-                state.registers[curr_to_register].register_content.get_size() + register_content.get_size() ==
-                state.registers[curr_to_register].get_size() and
-                state.registers[curr_to_register].register_content.get_count() != 0
+            state.registers[curr_to_register].register_content.get_size() + register_content.get_size()
+            == state.registers[curr_to_register].get_size()
+            and state.registers[curr_to_register].register_content.get_count() != 0
         ):
             state.registers[curr_to_register].register_content.append_content(register_content)
             decompiler_data.make_version(state, curr_to_register)
 
             offset = hex(int(offset, 16) + register_content.get_size() // 8)
             written_bits += register_content.get_size()
-        elif state.registers[curr_to_register].register_content.get_size() + register_content.get_size() == \
-                state.registers[curr_to_register].get_size():
-
+        elif (
+            state.registers[curr_to_register].register_content.get_size() + register_content.get_size()
+            == state.registers[curr_to_register].get_size()
+        ):
             if state.registers[curr_to_register].register_content.get_count() == 0:
                 state.registers[curr_to_register] = Register(
                     integrity=Integrity.ENTIRE,
@@ -195,15 +194,17 @@ def upload_by_offset(
             offset = hex(int(offset, 16) + register_content.get_size() // 8)
             written_bits += register_content.get_size()
         else:
-            if state.registers[curr_to_register].register_content.get_size() == 0 and \
-                    register_content.get_size() == state.registers[curr_to_register].get_size() * 2:
+            if (
+                state.registers[curr_to_register].register_content.get_size() == 0
+                and register_content.get_size() == state.registers[curr_to_register].get_size() * 2
+            ):
                 state.registers[curr_to_register] = Register(
                     integrity=Integrity.LOW_PART,
                     register_content=RegisterContent(
                         value=register_content.get_value(),
                         type_=register_content.get_type(),
                         data_type=register_content.get_data_type(),
-                    )
+                    ),
                 )
                 decompiler_data.make_version(state, curr_to_register)
                 written_bits += register_content.get_size() // 2
@@ -217,7 +218,7 @@ def upload_by_offset(
                         value=register_content.get_value(),
                         type_=register_content.get_type(),
                         data_type=register_content.get_data_type(),
-                    )
+                    ),
                 )
                 decompiler_data.make_version(state, curr_to_register)
 
@@ -231,9 +232,7 @@ def upload_by_offset(
             curr_to_register = get_next_reg(curr_to_register)
             state.registers[curr_to_register] = Register(
                 integrity=Integrity.ENTIRE,
-                register_content=CombinedRegisterContent(
-                    register_contents=[]
-                ),
+                register_content=CombinedRegisterContent(register_contents=[]),
             )
 
     state.registers[curr_to_register].try_simplify()
