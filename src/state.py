@@ -1,5 +1,3 @@
-from typing import Optional
-
 from src.combined_register_content import CombinedRegisterContent
 from src.integrity import Integrity
 from src.logical_variable import ExecCondition
@@ -10,7 +8,7 @@ from src.register_type import RegisterType
 
 class State:
     def __init__(self):
-        self.registers: dict[str, Optional[Register]] = {
+        self.registers: dict[str, Register | None] = {
             "s0": None,
             "s1": None,
             "s2": None,

@@ -1,11 +1,10 @@
 import abc
-from typing import Optional
 
 from parsers.parse_objects.base import ParseObject
 
 
 class BaseParser(abc.ABC):
-    def parse(self, text: str) -> Optional[tuple[ParseObject, str]]:
+    def parse(self, text: str) -> tuple[ParseObject, str] | None:
         pass
 
     def __add__(self, other_parser: "BaseParser") -> "BaseParser":

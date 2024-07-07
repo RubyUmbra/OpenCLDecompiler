@@ -31,7 +31,7 @@ def main(input_par, output_par, flag_for_decompilation, cfg_path, is_new_parser:
         )
 
     with open(output_par, "w", encoding="utf-8") as output_file:
-        with open(input_par, "r", encoding="utf-8") as file:
+        with open(input_par, encoding="utf-8") as file:
             body_of_file = file.read()
 
         decompiler_data = DecompilerData()

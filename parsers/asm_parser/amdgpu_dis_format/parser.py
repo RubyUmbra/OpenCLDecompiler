@@ -1,5 +1,3 @@
-from typing import Optional
-
 from src.opencl_types import make_asm_type
 from src.register_content import RegisterContent
 from src.register_type import RegisterType
@@ -115,7 +113,7 @@ class AmdGpuDisParser:
             hidden=arg[".value_kind"].startswith("hidden_"),
         )
 
-    def parse(self, text: str) -> Optional[tuple[ParseObject, str]]:
+    def parse(self, text: str) -> tuple[ParseObject, str] | None:
         text = self._remove_redundant_lines(text)
 
         config_text = text[text.find("amdhsa.kernels:") :]

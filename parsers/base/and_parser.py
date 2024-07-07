@@ -1,5 +1,4 @@
 import functools
-from typing import Optional
 
 from parsers.base.base_parser import BaseParser
 from parsers.parse_objects.base import ParseObject
@@ -12,7 +11,7 @@ class AndParser(BaseParser):
     ):
         self._parsers = parsers
 
-    def parse(self, text: str) -> Optional[tuple[ParseObject, str]]:
+    def parse(self, text: str) -> tuple[ParseObject, str] | None:
         results = []
         rest = text
 

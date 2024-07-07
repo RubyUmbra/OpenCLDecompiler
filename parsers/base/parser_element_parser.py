@@ -1,5 +1,3 @@
-from typing import Optional
-
 from pyparsing import Combine, ParseException, ParserElement
 
 from parsers.base.base_parser import BaseParser
@@ -26,7 +24,7 @@ class ParserElementParser(BaseParser):
     def parser_element(self) -> ParserElement:
         return self._raw_parser_element
 
-    def parse(self, text: str) -> Optional[tuple[ParseObject, str]]:
+    def parse(self, text: str) -> tuple[ParseObject, str] | None:
         try:
             result, rest = self._parser_element.parse_string(text)[0]
             return StringParseObject(result), rest

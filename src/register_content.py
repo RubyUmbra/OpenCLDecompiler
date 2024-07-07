@@ -1,6 +1,6 @@
 import copy
 import enum
-from typing import Optional, Union
+from typing import Optional
 
 from src.constants import DEFAULT_REGISTER_SIZE
 from src.register_type import RegisterType
@@ -22,11 +22,11 @@ class RegisterSignType(enum.Enum):
 class RegisterContent:
     def __init__(
         self,
-        value: Union[list[any], any],
-        type_: Union[list, RegisterType],
-        size: Union[list, int] = DEFAULT_REGISTER_SIZE,
-        data_type: Union[list, Optional[str]] = None,
-        sign: Union[list, RegisterSignType] = RegisterSignType.POSITIVE,
+        value: list[any] | any,
+        type_: list | RegisterType,
+        size: list | int = DEFAULT_REGISTER_SIZE,
+        data_type: list | str | None = None,
+        sign: list | RegisterSignType = RegisterSignType.POSITIVE,
     ):
         self._value = value
         self._type = type_
@@ -43,7 +43,7 @@ class RegisterContent:
     def get_size(self) -> int:
         return self._size
 
-    def get_data_type(self) -> Optional[str]:
+    def get_data_type(self) -> str | None:
         return self._data_type
 
     def get_sign(self) -> RegisterSignType:
@@ -69,7 +69,7 @@ class RegisterContent:
 
         if isinstance(other, str):
             if other.startswith("0x"):
-                bit_str = "{:b}".format(int(other, 16))
+                bit_str = f"{int(other, 16):b}"
                 if bit_str.count("0") == 0 and len(bit_str) == self.get_size():
                     return copy.deepcopy(self)
 

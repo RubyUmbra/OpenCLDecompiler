@@ -1,5 +1,4 @@
 import functools
-from typing import Optional
 
 from parsers.base.base_parser import BaseParser
 from parsers.parse_objects.base import ParseObject
@@ -11,7 +10,7 @@ class ParseUntilParser(BaseParser):
         self._parser = parser
         self._until_parser = until_parser
 
-    def parse(self, text: str) -> Optional[tuple[ParseObject, str]]:
+    def parse(self, text: str) -> tuple[ParseObject, str] | None:
         results = []
         rest = text
 

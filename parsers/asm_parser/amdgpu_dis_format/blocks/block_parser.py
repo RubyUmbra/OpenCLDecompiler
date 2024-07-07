@@ -1,5 +1,3 @@
-from typing import Optional
-
 from pyparsing import Literal, Regex, line_start
 
 from parsers.base.base_parser import BaseParser
@@ -12,7 +10,7 @@ from parsers.parse_objects.base.list_parse_object import ListParseObject
 
 
 class AmdGpuDisBlockParser(BaseParser):
-    def parse(self, text: str) -> Optional[tuple[ParseObject, str]]:
+    def parse(self, text: str) -> tuple[ParseObject, str] | None:
         parse_result = LineParser(
             IgnoreParser(ParserElementParser(line_start))
             + ParserElementParser(Regex(r"[^:\s]+"))

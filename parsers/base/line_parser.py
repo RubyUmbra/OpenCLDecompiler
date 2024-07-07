@@ -1,5 +1,3 @@
-from typing import Optional
-
 from pyparsing import line_end
 
 from parsers.base.base_parser import BaseParser
@@ -12,5 +10,5 @@ class LineParser(BaseParser):
     def __init__(self, parser: BaseParser):
         self._parser = parser
 
-    def parse(self, text: str) -> Optional[tuple[ParseObject, str]]:
+    def parse(self, text: str) -> tuple[ParseObject, str] | None:
         return (self._parser + IgnoreParser(ParserElementParser(line_end))).parse(text)

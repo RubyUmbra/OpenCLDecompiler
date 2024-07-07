@@ -17,6 +17,8 @@ select = [
     "I",
     # pep8-naming
     "N",
+    # pyupgrade
+    "UP",
 ]
 ignore = [
     # Conflicting with formatter rules

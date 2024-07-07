@@ -1,5 +1,3 @@
-from typing import Optional
-
 from pyparsing import Literal, Regex, White, line_start
 
 from parsers.base import BaseParser, IgnoreParser, OneOrMoreParser, ParserElementParser
@@ -18,7 +16,7 @@ class ListElementValuesParser(BaseParser):
         self._white_prefix = white_prefix
         self._check_spaces = check_spaces
 
-    def parse(self, text: str) -> Optional[tuple[ParseObject, str]]:
+    def parse(self, text: str) -> tuple[ParseObject, str] | None:
         if self._check_spaces:
             parser = ParserElementParser(White())
             parse_result = parser.parse(text)
@@ -57,7 +55,7 @@ class ListElementParser(BaseParser):
     def __init__(self, white_prefix: str):
         self._white_prefix = white_prefix
 
-    def parse(self, text: str) -> Optional[tuple[ParseObject, str]]:
+    def parse(self, text: str) -> tuple[ParseObject, str] | None:
         parser = IgnoreParser(ParserElementParser(Literal("-"))) + ListElementValuesParser(self._white_prefix, False)
         parse_result = parser.parse(text)
         if parse_result is None:
@@ -81,7 +79,7 @@ class ListParser(BaseParser):
     def __init__(self, white_prefix: str):
         self._white_prefix = white_prefix
 
-    def parse(self, text: str) -> Optional[tuple[ParseObject, str]]:
+    def parse(self, text: str) -> tuple[ParseObject, str] | None:
         parser = ParserElementParser(White())
         parse_result = parser.parse(text)
         if parse_result is None:
@@ -95,7 +93,7 @@ class ListParser(BaseParser):
 
 
 class AmdGpuDisConfigsParser(BaseParser):
-    def parse(self, text: str) -> Optional[tuple[ParseObject, str]]:
+    def parse(self, text: str) -> tuple[ParseObject, str] | None:
         parser = IgnoreParser(ParserElementParser(line_start + Literal("amdhsa.kernels:"))) + ListParser("\n")
         parse_result = parser.parse(text)
         if parse_result is None:

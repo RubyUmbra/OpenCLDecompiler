@@ -1,5 +1,3 @@
-from typing import Optional
-
 from parsers.parse_objects.base import ParseObject
 from parsers.parse_objects.base.parse_object import EmptyParseObject
 
@@ -8,7 +6,7 @@ class StringParseObject(ParseObject):
     def __init__(self, obj: str):
         super().__init__(obj)
 
-    def __add__(self, other: ParseObject) -> Optional[ParseObject]:
+    def __add__(self, other: ParseObject) -> ParseObject | None:
         if isinstance(other, EmptyParseObject):
             return self
 

@@ -19,7 +19,7 @@ class EmptyParseObject(ParseObject):
     def __init__(self):
         super().__init__(None)
 
-    def __add__(self, other: ParseObject) -> Optional[ParseObject]:
+    def __add__(self, other: ParseObject) -> ParseObject | None:
         return other
 
     def __repr__(self) -> str:
