@@ -10,6 +10,9 @@ src = ["src", "test"]
 select = [
     # Pyflakes
     "F",
+    # pycodestyle
+    "E",
+    "W",
     # isort
     "I",
 ]
