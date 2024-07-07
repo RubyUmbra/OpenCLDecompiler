@@ -1,0 +1,4 @@
+-r requirements.txt
+pytest~=8.2
+pytest-xdist~=3.5
+ruff~=0.5
