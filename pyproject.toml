@@ -8,6 +8,8 @@ src = ["src", "test"]
 
 [tool.ruff.lint]
 select = [
+    # Pyflakes
+    "F",
     # isort
     "I",
 ]
