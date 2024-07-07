@@ -1,5 +1,10 @@
 from typing import Optional
 
+from src.opencl_types import make_asm_type
+from src.register_content import RegisterContent
+from src.register_type import RegisterType
+from src.utils import ConfigData, KernelArgument
+
 from parsers.asm_parser.amdgpu_dis_format.blocks.block_parser import AmdGpuDisBlockParser
 from parsers.asm_parser.amdgpu_dis_format.config.config_parser import AmdGpuDisConfigsParser
 from parsers.base.any_parser import AnyParser
@@ -7,10 +12,6 @@ from parsers.base.ignore_parser import IgnoreParser
 from parsers.base.line_parser import LineParser
 from parsers.base.one_or_more_parser import OneOrMoreParser
 from parsers.parse_objects.base import ParseObject
-from src.opencl_types import make_asm_type
-from src.register_content import RegisterContent
-from src.register_type import RegisterType
-from src.utils import ConfigData, KernelArgument
 
 ARG_KIND_TO_REGISTER_TYPE = {
     "by_value": RegisterType.KERNEL_ARGUMENT_VALUE,

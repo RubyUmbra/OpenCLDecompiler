@@ -1,8 +1,8 @@
 from typing import Optional
 
-from pyparsing import Literal, line_start, White, Regex
+from pyparsing import Literal, Regex, White, line_start
 
-from parsers.base import BaseParser, IgnoreParser, ParserElementParser, OneOrMoreParser
+from parsers.base import BaseParser, IgnoreParser, OneOrMoreParser, ParserElementParser
 from parsers.models import Config
 from parsers.parse_objects.base import ParseObject
 from parsers.parse_objects.base.dict_parse_object import DictParseObject

@@ -1,6 +1,6 @@
 from typing import Optional
 
-from pyparsing import line_start, Regex, Literal
+from pyparsing import Literal, Regex, line_start
 
 from parsers.base.base_parser import BaseParser
 from parsers.base.ignore_parser import IgnoreParser

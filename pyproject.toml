@@ -8,6 +8,8 @@ src = ["src", "test"]
 
 [tool.ruff.lint]
 select = [
+    # isort
+    "I",
 ]
 ignore = [
     # Conflicting with formatter rules

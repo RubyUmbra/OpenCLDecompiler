@@ -1,6 +1,6 @@
 from typing import Optional
 
-from pyparsing import Regex, OneOrMore
+from pyparsing import OneOrMore, Regex
 
 from parsers.base.base_parser import BaseParser
 from parsers.base.parser_element_parser import ParserElementParser

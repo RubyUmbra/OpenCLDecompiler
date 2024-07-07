@@ -1,6 +1,6 @@
 from typing import Optional
 
-from pyparsing import ParserElement, ParseException, Combine
+from pyparsing import Combine, ParseException, ParserElement
 
 from parsers.base.base_parser import BaseParser
 from parsers.parse_objects.base import ParseObject

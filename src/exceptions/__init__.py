@@ -1,2 +1,1 @@
-from .common import LogicalError
-from .common import OpenCLDecompilerError
+from .common import LogicalError, OpenCLDecompilerError

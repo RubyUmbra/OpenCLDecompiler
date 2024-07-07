@@ -1,5 +1,4 @@
-from src import base
-from src import utils
+from src import base, utils
 
 
 class Node:

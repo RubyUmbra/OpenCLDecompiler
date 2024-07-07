@@ -1,5 +1,5 @@
-from . import amdcl2_parser, rocm_parser, unknown_parser
 from ..utils import DriverFormat
+from . import amdcl2_parser, rocm_parser, unknown_parser
 
 parsers = {
     DriverFormat.AMDCL2: amdcl2_parser,
