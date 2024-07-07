@@ -15,7 +15,7 @@ class VAddc(BaseInstruction):
         self.ssrc2 = self.instruction[5]
 
     def to_print_unresolved(self):
-        if self.suffix == 'u32':
+        if self.suffix == "u32":
             temp = "temp" + str(self.decompiler_data.number_of_temp)
             mask = "mask" + str(self.decompiler_data.number_of_mask)
             cc = "cc" + str(self.decompiler_data.number_of_cc)
@@ -45,8 +45,8 @@ class VAddc(BaseInstruction):
                     reg=new_reg,
                 )
 
-        if self.suffix == 'u32':
-            new_value = make_op(self.node, self.src0, self.src1, '+', '(ulong)', '(ulong)', suffix=self.suffix)
+        if self.suffix == "u32":
+            new_value = make_op(self.node, self.src0, self.src1, "+", "(ulong)", "(ulong)", suffix=self.suffix)
             src0_reg = is_reg(self.src0)
             src1_reg = is_reg(self.src1)
             reg_type = RegisterType.UNKNOWN

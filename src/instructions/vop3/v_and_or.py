@@ -10,7 +10,7 @@ class VAndOr(BaseInstruction):
         self.src2 = self.instruction[4]
 
     def to_print_unresolved(self):
-        if self.suffix == 'b32':
+        if self.suffix == "b32":
             self.decompiler_data.write(self.vdst + " = (" + self.src0 + " & " + self.src1
                                        + ") | " + self.src2 + " // v_and_or_b32\n")
             return self.node

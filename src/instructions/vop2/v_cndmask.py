@@ -12,14 +12,14 @@ class VCndmask(BaseInstruction):
         self.ssrc2 = self.instruction[4]
 
     def to_print_unresolved(self):
-        if self.suffix == 'b32':
+        if self.suffix == "b32":
             self.decompiler_data.write(self.vdst + " = " + self.ssrc2 + "&(1ULL<<LANEID) ? "
                                        + self.src1 + " : " + self.src0 + " // v_cndmask_b32\n")
             return self.node
         return super().to_print_unresolved()
 
     def to_fill_node(self):
-        if self.suffix == 'b32':
+        if self.suffix == "b32":
             if self.src1 in self.node.state.registers and \
                     self.node.state.registers[self.src1].type == RegisterType.DIVISION_PT8:
                 new_value = self.node.state.registers[self.src1].val
@@ -48,7 +48,7 @@ class VCndmask(BaseInstruction):
         return super().to_fill_node()
 
     def to_print(self):
-        if self.suffix == 'b32':
+        if self.suffix == "b32":
             vdst = try_get_reg(self.node, self.vdst)
             ssrc2 = try_get_reg(self.node, self.ssrc2)
             if vdst and vdst.type == RegisterType.DIVISION_PT9:
@@ -62,11 +62,11 @@ class VCndmask(BaseInstruction):
             if "?" in ssrc2.val:
                 ssrc2.register_content._value = \
                     "(" + ssrc2.val + ")"  # pylint: disable=W0212
-            if 's' in self.src1 or 'v' in self.src1:
+            if "s" in self.src1 or "v" in self.src1:
                 src1_parent_val = self.node.parent[0].state.registers[self.src1].val
             else:
                 src1_parent_val = self.src1
-            if 's' in self.src0 or 'v' in self.src0:
+            if "s" in self.src0 or "v" in self.src0:
                 src0_parent_val = self.node.parent[0].state.registers[self.src0].val
             else:
                 src0_parent_val = self.src0

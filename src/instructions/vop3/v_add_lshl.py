@@ -21,14 +21,14 @@ class VAddLshl(BaseInstruction):
         self.vdst, self.src0, self.src1, self.src2 = self.instruction[1:5]
 
     def to_print_unresolved(self):
-        if self.suffix == 'u32':
+        if self.suffix == "u32":
             self.decompiler_data.write(
                 f"{self.vdst} = ({self.src0} + {self.src1}) << {self.src2} // {self.instruction[0]}\n")
             return self.node
         return super().to_print_unresolved()
 
     def to_fill_node(self):
-        if self.suffix == 'u32':
+        if self.suffix == "u32":
             if is_reg(self.src0) and is_reg(self.src1) and self.src2.isdigit():
                 if not isinstance(self.node.state.registers[self.src0].register_content, OperationRegisterContent) \
                         and not isinstance(
@@ -41,7 +41,7 @@ class VAddLshl(BaseInstruction):
                     })
                     if src_types in _instruction_internal_mapping_by_types:
                         new_value, _ = _instruction_internal_mapping_by_types[src_types]
-                        new_value = make_op(self.node, new_value, str(pow(2, int(self.src2))), '*', suffix=self.suffix)
+                        new_value = make_op(self.node, new_value, str(pow(2, int(self.src2))), "*", suffix=self.suffix)
                         return set_reg_value(
                             node=self.node,
                             new_value=new_value,
@@ -53,7 +53,7 @@ class VAddLshl(BaseInstruction):
                     new_reg = self.node.state.registers[self.src0] + self.node.state.registers[self.src1]
 
                     if not isinstance(new_reg.register_content, OperationRegisterContent):
-                        new_value = make_op(self.node, new_reg.val, str(pow(2, int(self.src2))), '*',
+                        new_value = make_op(self.node, new_reg.val, str(pow(2, int(self.src2))), "*",
                                             suffix=self.suffix)
                         return set_reg_value(
                             node=self.node,

@@ -164,7 +164,7 @@ def make_new_type_without_modifier(node, register):
 
 def compare_values(node: Node, to_reg: str, from_reg0: str, from_reg1: str, operation: str, suffix: str) -> Node:
     datatype = make_opencl_type(suffix)
-    datatype = f'({datatype})' if datatype != 'unknown type' else ''
+    datatype = f"({datatype})" if datatype != "unknown type" else ""
     new_value = make_op(node, from_reg0, from_reg1, operation, datatype, datatype, suffix=suffix)
     from_regs = [from_reg0, from_reg1]
     if is_range(to_reg):
@@ -182,8 +182,8 @@ def simplify_opencl_statement(opencl_line):
     start_close = 0
     new_line = ""
     while True:
-        open_bracket_position = opencl_line.find('[', start_open + 1)
-        close_bracket_position = opencl_line.find(']', start_close + 1)
+        open_bracket_position = opencl_line.find("[", start_open + 1)
+        close_bracket_position = opencl_line.find("]", start_close + 1)
         if open_bracket_position == -1:
             break
         substring = opencl_line[open_bracket_position + 1:close_bracket_position]
@@ -192,8 +192,8 @@ def simplify_opencl_statement(opencl_line):
             if data_type + key in substring:
                 current_type_conversion[key] = data_type
         for key, data_type in current_type_conversion.items():
-            substring = substring.replace(data_type, '')
-        if substring != '':
+            substring = substring.replace(data_type, "")
+        if substring != "":
             substring = sympy.simplify(substring)
             substring = sympy.sstr(substring)
         # doesn't recover type (int)A in case (int)(A + B) - B
@@ -205,7 +205,7 @@ def simplify_opencl_statement(opencl_line):
             new_line += opencl_line[start_close:open_bracket_position + 1]
         else:
             new_line += opencl_line[start_close + 1:open_bracket_position + 1]
-        new_line += substring + ']'
+        new_line += substring + "]"
         start_open = open_bracket_position
         start_close = close_bracket_position
     if start_close != 0:
@@ -217,9 +217,9 @@ def simplify_opencl_statement(opencl_line):
 
 # gdata0[get_local_id(0)] -> gdata0
 def get_name(key):
-    position_gdata = key.find('gdata')
+    position_gdata = key.find("gdata")
     previous_position = position_gdata
-    while position_gdata + 5 < len(key) and '0' <= key[position_gdata + 5] <= '9':
+    while position_gdata + 5 < len(key) and "0" <= key[position_gdata + 5] <= "9":
         position_gdata += 1
     return key[previous_position:position_gdata + 5]
 
@@ -229,22 +229,22 @@ def optimize_names_of_vars():
     new_names_of_vars = {}
     # remove gdata element access (gdata[...] -> gdata)
     for key, val in decompiler_data.names_of_vars.items():
-        if 'gdata' in key:
+        if "gdata" in key:
             name = get_name(key)
             new_names_of_vars[name] = val
-        elif 'var' in key:
+        elif "var" in key:
             new_names_of_vars[key] = val
     decompiler_data.names_of_vars = new_names_of_vars
     for key, val in decompiler_data.var_value.items():
-        if 'gdata' in val:
+        if "gdata" in val:
             new_val = get_name(val)
             decompiler_data.var_value[key] = new_val
 
 
 # TODO: разобраться, как перейти к общему случаю
 def check_big_values(node, start_register, end_register):
-    if node.state.registers[start_register].val == '0xa2000000' \
-            and node.state.registers[end_register].val == '0x426d1a94':
+    if node.state.registers[start_register].val == "0xa2000000" \
+            and node.state.registers[end_register].val == "0x426d1a94":
         return True, "1e12"
     return False, 0
 
@@ -284,26 +284,26 @@ def change_vals_for_make_op(node, register, reg_type, operation, _suffix):
     decompiler_data = DecompilerData()
     new_val = check_reg_for_val(node, register)
     if (operation != "+" or reg_type) and ("-" in new_val or "+" in new_val or "*" in new_val or "/" in new_val):
-        new_val = f'({new_val})'
-    if reg_type != '':
+        new_val = f"({new_val})"
+    if reg_type != "":
         decompiler_data.type_conversion[new_val] = reg_type
     new_val = reg_type + new_val
-    if len(reg_type) > 0 and ')' not in reg_type:
-        new_val += ')'
+    if len(reg_type) > 0 and ")" not in reg_type:
+        new_val += ")"
     return new_val
 
 
-def make_op(node, register0, register1, operation, type0='', type1='', suffix=''):
+def make_op(node, register0, register1, operation, type0="", type1="", suffix=""):
     new_val0 = change_vals_for_make_op(node, register0, type0, operation, suffix)
     new_val1 = change_vals_for_make_op(node, register1, type1, operation, suffix)
-    return f'{new_val0} {operation} {new_val1}'
+    return f"{new_val0} {operation} {new_val1}"
 
 
 def evaluate_from_hex(global_data, size, flag):
     typed_global_data = []
     for element in range(int(len(global_data) / size)):
         array_of_bytes = global_data[element * size: element * size + size]
-        string_of_bytes = ''.join(elem[2:] + '' for elem in array_of_bytes)
+        string_of_bytes = "".join(elem[2:] + "" for elem in array_of_bytes)
         # output binascii.unhexlify is byteset from string; struct.unpack encode byte to value.
         value = struct.unpack(flag, binascii.unhexlify(string_of_bytes))[0]
         typed_global_data.append(str(value))
@@ -552,8 +552,8 @@ class DecompilerData(metaclass=Singleton):  # pylint: disable=R0904, R0902
         g_id = ["s8", "s9", "s10"] if self.config_data.usesetup else ["s6", "s7", "s8"]
         if self.is_rdna3:
             g_id = ["s2", "s3", "s4"]
-        if ',' in dimensions:
-            dimensions = dimensions.split(',')
+        if "," in dimensions:
+            dimensions = dimensions.split(",")
             max_dim = dimensions[0]
             for dim in dimensions:
                 if len(dim) > len(max_dim):

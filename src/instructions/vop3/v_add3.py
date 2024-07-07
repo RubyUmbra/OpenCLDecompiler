@@ -41,7 +41,7 @@ class VAdd3(BaseInstruction):
         self.vdst, self.src0, self.src1, self.src2 = self.instruction[1:5]
 
     def to_print_unresolved(self):
-        if self.suffix == 'u32':
+        if self.suffix == "u32":
             temp = "temp" + str(self.decompiler_data.number_of_temp)
             mask = "mask" + str(self.decompiler_data.number_of_mask)
             self.decompiler_data.write("uint " + temp + " = (ulong)" + self.src0 +
@@ -55,7 +55,7 @@ class VAdd3(BaseInstruction):
         return super().to_print_unresolved()
 
     def to_fill_node(self):
-        if self.suffix == 'u32':
+        if self.suffix == "u32":
             if self.decompiler_data.is_rdna3:
                 try:
                     new_reg = self.node.state.registers[self.src0] + self.node.state.registers[self.src1]
@@ -70,8 +70,8 @@ class VAdd3(BaseInstruction):
                 except Exception:
                     pass
 
-            new_value = make_op(self.node, self.src0, self.src1, '+', '(ulong)', '(ulong)', suffix=self.suffix)
-            new_value = make_op(self.node, new_value, self.src2, '+', '', '(ulong)', suffix=self.suffix)
+            new_value = make_op(self.node, self.src0, self.src1, "+", "(ulong)", "(ulong)", suffix=self.suffix)
+            new_value = make_op(self.node, new_value, self.src2, "+", "", "(ulong)", suffix=self.suffix)
             reg_type = RegisterType.UNKNOWN
             reg_permutations_for_sum_mapping = [
                 (self.src0, self.src1, self.src2),
@@ -86,7 +86,7 @@ class VAdd3(BaseInstruction):
                     })
                     if src_types in _instruction_internal_mapping_by_types:
                         new_value, _ = _instruction_internal_mapping_by_types[src_types]
-                        new_value = make_op(self.node, new_value, src2, '+', '(ulong)', '(ulong)', suffix=self.suffix)
+                        new_value = make_op(self.node, new_value, src2, "+", "(ulong)", "(ulong)", suffix=self.suffix)
             if is_reg(self.src0) and is_reg(self.src1) and is_reg(self.src2):
                 src_types = frozenset({
                     self.node.state.registers[self.src0].get_type(),

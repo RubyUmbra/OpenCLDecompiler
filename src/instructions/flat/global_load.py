@@ -51,7 +51,7 @@ class GlobalLoad(FlatLoad):
                 reg_type=RegisterType.WORK_DIM,
             )
 
-        if self.suffix in ["b32", "u16", 'u8']:
+        if self.suffix in ["b32", "u16", "u8"]:
             if self.node.state.registers[self.from_registers].type == RegisterType.ARGUMENTS_POINTER:
                 offset = hex(int(self.inst_offset.split(":")[-1]))
                 if self.suffix in ["u16", "u8"]:

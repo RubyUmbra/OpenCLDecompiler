@@ -11,13 +11,13 @@ class SXor(BaseInstruction):
         self.ssrc1 = self.instruction[3]
 
     def to_print_unresolved(self):
-        if self.suffix == 'b32':
+        if self.suffix == "b32":
             self.decompiler_data.write(f"{self.sdst} = {self.ssrc0} ^ {self.ssrc1} // {self.instruction[0]}\n")
             return self.node
         return super().to_print_unresolved()
 
     def to_fill_node(self):
-        if self.suffix in ['b32', 'b64']:
+        if self.suffix in ["b32", "b64"]:
             if "exec" in [self.sdst, self.ssrc0]:
                 new_exec_condition = self.decompiler_data.exec_registers[self.ssrc0] ^ \
                                      self.decompiler_data.exec_registers[self.ssrc1]
@@ -29,7 +29,7 @@ class SXor(BaseInstruction):
                 reg_entire = self.node.state.registers[self.ssrc1].integrity
             if self.node.state.registers.get(self.ssrc0) is not None:
                 reg_entire = self.node.state.registers[self.ssrc0].integrity
-            new_value = make_op(self.node, self.ssrc0, self.ssrc1, '^', suffix=self.suffix)
+            new_value = make_op(self.node, self.ssrc0, self.ssrc1, "^", suffix=self.suffix)
             return set_reg_value(self.node, new_value, self.sdst, [self.ssrc0, self.ssrc1], self.suffix,
                                  integrity=reg_entire)
         return super().to_fill_node()

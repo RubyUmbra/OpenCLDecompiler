@@ -6,7 +6,7 @@ from src.register_content import RegisterContent
 from src.register_type import RegisterType
 
 usesetup_dict = {
-    '0x0': Register(
+    "0x0": Register(
         integrity=Integrity.ENTIRE,
         register_content=RegisterContent(
             value="",
@@ -14,42 +14,42 @@ usesetup_dict = {
         )
     ),
     #  TODO: Подумать, как лучше вписать, что здесь и LOCAL_SIZE_X, и LOCAL_SIZE_Y
-    '0x4': Register(
+    "0x4": Register(
         integrity=Integrity.ENTIRE,
         register_content=RegisterContent(
             value="get_local_size(0)",
             type_=RegisterType.LOCAL_SIZE_X,
         )
     ),
-    '0x8': Register(
+    "0x8": Register(
         integrity=Integrity.ENTIRE,
         register_content=RegisterContent(
             value="get_local_size(2)",
             type_=RegisterType.LOCAL_SIZE_Z,
         )
     ),
-    '0xc': Register(
+    "0xc": Register(
         integrity=Integrity.ENTIRE,
         register_content=RegisterContent(
             value="get_global_size(0)",
             type_=RegisterType.GLOBAL_SIZE_X,
         )
     ),
-    '0x10': Register(
+    "0x10": Register(
         integrity=Integrity.ENTIRE,
         register_content=RegisterContent(
             value="get_global_size(1)",
             type_=RegisterType.GLOBAL_SIZE_Y,
         )
     ),
-    '0x14': Register(
+    "0x14": Register(
         integrity=Integrity.ENTIRE,
         register_content=RegisterContent(
             value="get_global_size(2)",
             type_=RegisterType.GLOBAL_SIZE_Z,
         )
     ),
-    '0x18': Register(
+    "0x18": Register(
         integrity=Integrity.ENTIRE,
         register_content=RegisterContent(
             value="",
@@ -85,19 +85,19 @@ def upload_kernel_param(state, offset, to_registers):
             # This last argument isn't there since it's aligned.
             break
         if content.get_size() <= 4:
-            state.registers[f's{start}'] = Register(integrity=Integrity.ENTIRE, register_content=content)
-            decompiler_data.make_version(state, f's{start}')
+            state.registers[f"s{start}"] = Register(integrity=Integrity.ENTIRE, register_content=content)
+            decompiler_data.make_version(state, f"s{start}")
             start += 1
             offset += 4
         elif content.get_size() == 8:
             if start + 1 > end:
-                state.registers[f's{start}'] = Register(integrity=Integrity.ENTIRE, register_content=content)
-                decompiler_data.make_version(state, f's{start}')
+                state.registers[f"s{start}"] = Register(integrity=Integrity.ENTIRE, register_content=content)
+                decompiler_data.make_version(state, f"s{start}")
                 break
-            state.registers[f's{start}'] = Register(integrity=Integrity.LOW_PART, register_content=content)
-            decompiler_data.make_version(state, f's{start}')
-            state.registers[f's{start + 1}'] = Register(integrity=Integrity.HIGH_PART, register_content=content)
-            decompiler_data.make_version(state, f's{start + 1}')
+            state.registers[f"s{start}"] = Register(integrity=Integrity.LOW_PART, register_content=content)
+            decompiler_data.make_version(state, f"s{start}")
+            state.registers[f"s{start + 1}"] = Register(integrity=Integrity.HIGH_PART, register_content=content)
+            decompiler_data.make_version(state, f"s{start + 1}")
             start += 2
             offset += 8
         else:

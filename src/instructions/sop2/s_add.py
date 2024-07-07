@@ -20,7 +20,7 @@ class SAdd(BaseInstruction):
         self.ssrc1 = self.instruction[3]
 
     def to_print_unresolved(self):
-        if self.suffix in {'u32', 'i32'}:
+        if self.suffix in {"u32", "i32"}:
             temp = "temp" + str(self.decompiler_data.number_of_temp)
             self.decompiler_data.write(
                 f"ulong {temp} = (ulong){self.ssrc0} + (ulong){self.ssrc1} // {self.instruction[0]}\n")
@@ -31,7 +31,7 @@ class SAdd(BaseInstruction):
         return super().to_print_unresolved()
 
     def to_fill_node(self):
-        if self.suffix in {'u32', 'i32'}:
+        if self.suffix in {"u32", "i32"}:
             if self.decompiler_data.is_rdna3:
                 try:
                     new_reg = self.node.state.registers[self.ssrc0] + self.node.state.registers[self.ssrc1]
@@ -45,7 +45,7 @@ class SAdd(BaseInstruction):
                 except Exception:
                     pass
 
-            new_value = make_op(self.node, self.ssrc0, self.ssrc1, '+', '(ulong)', '(ulong)', suffix=self.suffix)
+            new_value = make_op(self.node, self.ssrc0, self.ssrc1, "+", "(ulong)", "(ulong)", suffix=self.suffix)
             ssrc0_reg = is_sgpr(self.ssrc0)
             ssrc1_reg = is_sgpr(self.ssrc1)
             data_type = self.suffix
@@ -63,19 +63,19 @@ class SAdd(BaseInstruction):
                 elif ssrc0_type == RegisterType.GLOBAL_DATA_POINTER:
                     name = self.node.state.registers[self.ssrc0].val
                     reg_type = RegisterType.GLOBAL_DATA_POINTER
-                    if self.node.state.registers[self.ssrc1].data_type == '4 bytes':
-                        new_value = make_op(self.node, self.ssrc1, '4', '/', suffix=self.suffix)
-                        new_value = make_op(self.node, name, new_value, '+', suffix=self.suffix)
-                        data_type = '4 bytes'
+                    if self.node.state.registers[self.ssrc1].data_type == "4 bytes":
+                        new_value = make_op(self.node, self.ssrc1, "4", "/", suffix=self.suffix)
+                        new_value = make_op(self.node, name, new_value, "+", suffix=self.suffix)
+                        data_type = "4 bytes"
                     else:
-                        new_value = make_op(self.node, self.ssrc1, '8', '/', suffix=self.suffix)
-                        new_value = make_op(self.node, name, new_value, '+', suffix=self.suffix)
-                        data_type = '8 bytes'
+                        new_value = make_op(self.node, self.ssrc1, "8", "/", suffix=self.suffix)
+                        new_value = make_op(self.node, name, new_value, "+", suffix=self.suffix)
+                        data_type = "8 bytes"
                 elif ssrc0_type == RegisterType.ADDRESS_KERNEL_ARGUMENT:
                     reg_type = RegisterType.ADDRESS_KERNEL_ARGUMENT
-                    if self.node.state.registers[self.ssrc0].data_type in ['u32', "i32", "gi32", "gu32"]:
-                        new_value = make_op(self.node, self.ssrc1, '4', '/', suffix=self.suffix)
-                        new_value = make_op(self.node, self.ssrc0, new_value, '+', suffix=self.suffix)
+                    if self.node.state.registers[self.ssrc0].data_type in ["u32", "i32", "gi32", "gu32"]:
+                        new_value = make_op(self.node, self.ssrc1, "4", "/", suffix=self.suffix)
+                        new_value = make_op(self.node, self.ssrc0, new_value, "+", suffix=self.suffix)
                 elif RegisterType.KERNEL_ARGUMENT_VALUE in src_types:
                     reg_type = RegisterType.KERNEL_ARGUMENT_VALUE
                 else:
@@ -87,9 +87,9 @@ class SAdd(BaseInstruction):
                 if ssrc1_reg:
                     reg_type = self.node.state.registers[self.ssrc1].type
                 if self.node.state.registers[self.ssrc0].type == RegisterType.ADDRESS_KERNEL_ARGUMENT:
-                    if self.node.state.registers[self.ssrc0].data_type in ['u32', "i32", "gi32", "gu32"]:
-                        new_value = make_op(self.node, self.ssrc1, '4', '/', suffix=self.suffix)
-                        new_value = make_op(self.node, self.ssrc0, new_value, '+', suffix=self.suffix)
+                    if self.node.state.registers[self.ssrc0].data_type in ["u32", "i32", "gi32", "gu32"]:
+                        new_value = make_op(self.node, self.ssrc1, "4", "/", suffix=self.suffix)
+                        new_value = make_op(self.node, self.ssrc0, new_value, "+", suffix=self.suffix)
             if self.node.state.registers[self.ssrc0].type == RegisterType.ADDRESS_KERNEL_ARGUMENT:
                 if self.ssrc0 == self.sdst:
                     data_type = self.node.parent[0].state.registers[self.ssrc0].data_type

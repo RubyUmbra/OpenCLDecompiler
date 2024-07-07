@@ -12,7 +12,7 @@ class SAddc(BaseInstruction):
         self.ssrc1 = self.instruction[3]
 
     def to_print_unresolved(self):
-        if self.suffix == 'u32':
+        if self.suffix == "u32":
             temp = "temp" + str(self.decompiler_data.number_of_temp)
             self.decompiler_data.write("ulong " + temp + " = (ulong)" + self.ssrc0
                                        + " + (ulong)" + self.ssrc1 + " + scc // s_addc_u32\n")
@@ -34,8 +34,8 @@ class SAddc(BaseInstruction):
                     reg=new_reg,
                 )
 
-        if self.suffix == 'u32':
-            new_value = make_op(self.node, self.ssrc0, self.ssrc1, '+', '(ulong)', '(ulong)', suffix=self.suffix)
+        if self.suffix == "u32":
+            new_value = make_op(self.node, self.ssrc0, self.ssrc1, "+", "(ulong)", "(ulong)", suffix=self.suffix)
             ssrc0_reg = is_sgpr(self.ssrc0)
             ssrc1_reg = is_sgpr(self.ssrc1)
             reg_type = RegisterType.INT32
@@ -48,9 +48,9 @@ class SAddc(BaseInstruction):
                 reg_type = self.node.state.registers[self.ssrc0].type
             if ssrc0_reg:
                 if self.node.state.registers[self.ssrc0].type == RegisterType.ADDRESS_KERNEL_ARGUMENT:
-                    if self.node.state.registers[self.ssrc0].data_type in ['u32', 'i32', 'gu32', 'gi32']:
-                        new_value = make_op(self.node, self.ssrc1, '4', '/', suffix=self.suffix)
-                        new_value = make_op(self.node, self.ssrc0, new_value, '+', suffix=self.suffix)
+                    if self.node.state.registers[self.ssrc0].data_type in ["u32", "i32", "gu32", "gi32"]:
+                        new_value = make_op(self.node, self.ssrc1, "4", "/", suffix=self.suffix)
+                        new_value = make_op(self.node, self.ssrc0, new_value, "+", suffix=self.suffix)
                     if self.ssrc0 == self.sdst:
                         data_type = self.node.parent[0].state.registers[self.ssrc0].data_type
                     else:

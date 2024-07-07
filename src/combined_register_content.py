@@ -120,19 +120,19 @@ class CombinedRegisterContent(RegisterContent):
                 reversed_i = len(bit_str) - i - 1
 
                 if begin is None:
-                    if bit_str[reversed_i] == '0':
+                    if bit_str[reversed_i] == "0":
                         continue
-                    if bit_str[reversed_i] == '1':
+                    if bit_str[reversed_i] == "1":
                         begin = i
                         end = begin
 
                     continue
 
-                if bit_str[reversed_i] == '1':
+                if bit_str[reversed_i] == "1":
                     end = i
 
                     continue
-                if bit_str[reversed_i] == '0':
+                if bit_str[reversed_i] == "0":
                     break
 
             for i in range(len(bit_str)):
@@ -141,7 +141,7 @@ class CombinedRegisterContent(RegisterContent):
                 if i <= end:
                     continue
 
-                if bit_str[reversed_i] == '1':
+                if bit_str[reversed_i] == "1":
                     return None
 
             return self._maybe_acquire_content(begin, end)

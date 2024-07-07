@@ -11,7 +11,7 @@ class SSetreg(BaseInstruction):
         self.sdst = self.instruction[5]
 
     def to_print_unresolved(self):
-        if self.suffix == 'b32':
+        if self.suffix == "b32":
             mask = "mask" + str(self.decompiler_data.number_of_mask)
             self.decompiler_data.write("uint " + mask + " = (1U << " + self.bitsize
                                        + ") - 1U) << " + self.bitoffset + " // s_setreg_b32\n")

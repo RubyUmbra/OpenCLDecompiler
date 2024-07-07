@@ -107,7 +107,7 @@ class FlatLoad(BaseInstruction):
                 output = "*(" + make_opencl_type(self.decompiler_data.names_of_vars[output]) + "*)(" + output + ")"
             var_name = self.node.state.registers[self.start_to_registers].val
             if is_vector_type(data_type):
-                if var_name[-2] == 's' and var_name[-1].isdigit():
+                if var_name[-2] == "s" and var_name[-1].isdigit():
                     var_name = var_name[:-5]
                 var_type = self.node.state.registers[self.start_to_registers].data_type
                 if data_type != var_type:

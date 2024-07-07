@@ -89,7 +89,7 @@ class FlatStore(BaseInstruction):
         return super().to_print_unresolved()
 
     def to_fill_node(self):
-        if self.suffix in ["dword", "dwordx2", "dwordx4", "byte", "short", "b32", "b64", "b8", 'u8']:
+        if self.suffix in ["dword", "dwordx2", "dwordx4", "byte", "short", "b32", "b64", "b8", "u8"]:
             suffix_size = 1
             if self.decompiler_data.is_rdna3:
                 suffix_size = int(self.suffix[1:]) // 32
@@ -106,7 +106,7 @@ class FlatStore(BaseInstruction):
                 # TODO: Сделать присвоение в пары
                 else:
                     if self.node.state.registers[self.from_registers].data_type is not None \
-                            and 'bytes' in self.node.state.registers[self.from_registers].data_type:
+                            and "bytes" in self.node.state.registers[self.from_registers].data_type:
                         self.node.state.registers[self.from_registers].cast_to(
                             self.node.state.registers[self.to_registers].data_type,
                         )
@@ -118,7 +118,7 @@ class FlatStore(BaseInstruction):
                                 and not is_vector_type(self.node.state.registers[self.from_registers].data_type) \
                                 and not is_vector_type(self.node.state.registers[self.to_registers].data_type):
                             val = self.node.state.registers[self.from_registers].get_value()
-                            if val[0] == '(':
+                            if val[0] == "(":
                                 val = val[val.find(")") + 1:]
                             if val not in self.decompiler_data.names_of_vars:
                                 self.node.state.registers[self.from_registers].cast_to(

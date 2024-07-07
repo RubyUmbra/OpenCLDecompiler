@@ -249,7 +249,7 @@ def is_sgpr(reg: str) -> bool:
 
 def is_vgpr(reg: str) -> bool:
     """Matches v0, v12 and etc."""
-    return re.match("v[0-9]+", reg) is not None or reg == 'vcc'
+    return re.match("v[0-9]+", reg) is not None or reg == "vcc"
 
 
 def is_reg(reg: str) -> bool:
@@ -259,7 +259,7 @@ def is_reg(reg: str) -> bool:
 def is_sgpr_pair(reg: str) -> bool:
     """Matches s[0:1], s[10:11] and etc."""
     if re.match("s\\[[0-9]+:[0-9]+]", reg) is not None:
-        start, end = reg.split(':')
+        start, end = reg.split(":")
         start: int = int(start[2:])
         end: int = int(end[:-1])
         return end - start == 1
@@ -269,7 +269,7 @@ def is_sgpr_pair(reg: str) -> bool:
 def is_vgpr_pair(reg: str) -> bool:
     """Matches v[0:1], v[10:11] and etc."""
     if re.match("v\\[[0-9]+:[0-9]+]", reg) is not None:
-        start, end = reg.split(':')
+        start, end = reg.split(":")
         start: int = int(start[2:])
         end: int = int(end[:-1])
         return end - start == 1
@@ -296,7 +296,7 @@ def is_range(reg: str) -> bool:
 
 def split_range(reg: str) -> (str, str):
     """Splits v[0:1], s[10:12] and etc."""
-    start, end = reg.split(':')
+    start, end = reg.split(":")
     start: str = reg[0] + start[2:]
     end: str = reg[0] + end[:-1]
     return start, end
@@ -309,7 +309,7 @@ def check_and_split_regs(reg: str) -> (str, str):
 def check_and_split_regs_range_to_full_list(reg: str) -> [str]:
     if not is_range(reg):
         return [reg]
-    start, end = reg.split(':')
+    start, end = reg.split(":")
     return [reg[0] + str(i) for i in range(int(start[2:]), int(end[:-1]) + 1)]
 
 

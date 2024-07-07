@@ -10,23 +10,23 @@ from tests.disasm import DISASMS
 
 @pytest.fixture(autouse=True, scope="session")
 def check_and_set_pythonpath():
-    src_root = str(Path('..').absolute())
-    if 'PYTHONPATH' not in os.environ:
-        os.environ['PYTHONPATH'] = src_root
-    elif src_root not in os.environ['PYTHONPATH']:
-        os.environ['PYTHONPATH'] += os.pathsep + src_root
+    src_root = str(Path("..").absolute())
+    if "PYTHONPATH" not in os.environ:
+        os.environ["PYTHONPATH"] = src_root
+    elif src_root not in os.environ["PYTHONPATH"]:
+        os.environ["PYTHONPATH"] += os.pathsep + src_root
 
 
 def template(
         path_to_dir: str,
         dir_name: str,
         flag: Optional[str] = None,
-        mcpu: str = '',
+        mcpu: str = "",
         disasm: str = "clrxdisasm",
         is_new_parser: bool = False,
 ):
     if mcpu:
-        mcpu = f'-{mcpu}'
+        mcpu = f"-{mcpu}"
     path_to_exec_file = str(Path("..") / "src" / "parser_for_instructions.py")
     test_root = Path(".") / path_to_dir / dir_name
     path_to_bin = str(test_root / f"{dir_name}{mcpu}.bin")

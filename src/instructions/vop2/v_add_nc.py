@@ -20,13 +20,13 @@ class VAddNc(BaseInstruction):
         self.vdst, self.src0, self.src1 = self.instruction[1:4]
 
     def to_print_unresolved(self):
-        if self.suffix in ['u16', 'u32']:
+        if self.suffix in ["u16", "u32"]:
             self.decompiler_data.write(f"{self.vdst} = {self.src0} + {self.src1} // {self.instruction[0]}\n")
             return self.node
         return super().to_print_unresolved()
 
     def to_fill_node(self):
-        if self.suffix in ['u16', 'u32']:
+        if self.suffix in ["u16", "u32"]:
             if self.decompiler_data.is_rdna3:
                 try:
                     new_reg = self.node.state.registers[self.src0] + self.node.state.registers[self.src1]
@@ -91,7 +91,7 @@ class VAddNc(BaseInstruction):
                     reg_type=reg_type,
                 )
 
-            new_value = make_op(self.node, self.src0, self.src1, '+', '(ulong)', '(ulong)', suffix=self.suffix)
+            new_value = make_op(self.node, self.src0, self.src1, "+", "(ulong)", "(ulong)", suffix=self.suffix)
             reg_type = RegisterType.UNKNOWN
             if is_reg(self.src0) and is_reg(self.src1):
                 src_types = frozenset({
@@ -100,7 +100,7 @@ class VAddNc(BaseInstruction):
                 })
                 if src_types in _instruction_internal_mapping_by_types:
                     new_value, reg_type = _instruction_internal_mapping_by_types[src_types]
-                if self.node.state.registers[self.src1].val == '0':
+                if self.node.state.registers[self.src1].val == "0":
                     new_value = self.node.state.registers[self.src0].val
                     reg_type = self.node.state.registers[self.src0].type
             return set_reg_value(

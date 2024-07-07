@@ -7,7 +7,7 @@ from ..opencl_types import evaluate_size, make_asm_type
 
 def process_size_of_work_groups(set_of_config: List[str]) -> Optional[List[int]]:
     cws: bool = ".cws" in set_of_config[1]
-    return list(map(int, set_of_config[1].replace(',', ' ').split()[1:])) if cws else None
+    return list(map(int, set_of_config[1].replace(",", " ").split()[1:])) if cws else None
 
 
 def process_local_size(set_of_config: List[str]) -> Optional[int]:
@@ -19,22 +19,22 @@ def process_params(set_of_config: List[str]) -> List[KernelArgument]:
     args = []
     offset = 0
     for row in set_of_config:
-        if not row.startswith('.arg '):
+        if not row.startswith(".arg "):
             continue
-        row = row.removeprefix('.arg ').removesuffix(',')
-        name, _, type_name, *other = row.split(', ')
+        row = row.removeprefix(".arg ").removesuffix(",")
+        name, _, type_name, *other = row.split(", ")
         if len(other) > 0:
             type_name = "__" + other[0] + " " + type_name
-        hidden = name.startswith('_.')
+        hidden = name.startswith("_.")
         if type_name[-1] == "*":
             type_name = type_name[:-1]
             name = "*" + name
-        size = 8 if name.startswith('*') else evaluate_size(make_asm_type(type_name))[0]
+        size = 8 if name.startswith("*") else evaluate_size(make_asm_type(type_name))[0]
         if offset % size != 0 and size <= 8:
             offset += size - offset % size
         for i in range(3):
-            if name == f'_.global_offset_{i}':
-                name = f'get_global_offset({i})'
+            if name == f"_.global_offset_{i}":
+                name = f"get_global_offset({i})"
         args.append(KernelArgument(
             type_name=type_name,
             name=name,

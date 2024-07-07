@@ -10,7 +10,7 @@ from src.register_type import RegisterType
 
 def find_max_and_prev_versions(curr_node):
     for reg in curr_node.state.registers:
-        if reg in ['vcc', 'scc', 'exec']:
+        if reg in ["vcc", "scc", "exec"]:
             continue
         prev_versions_of_reg = set()
         max_version = 0
@@ -169,13 +169,13 @@ def change_values_for_one_instruction(curr_node, changes):
                 and len(register) > 1 \
                 and "cnd" not in curr_node.instruction[0]:
             if register[1] == "[" and "s_or" not in curr_node.instruction[0] \
-                    and 's_and' not in curr_node.instruction[0]:
+                    and "s_and" not in curr_node.instruction[0]:
                 register = register[0] + register[2: register.find(":")]
             first_reg = curr_node.instruction[1]
             if "s_cmp" in curr_node.instruction[0]:
                 first_reg = "scc"
             if first_reg[1] == "[" and "s_or" not in curr_node.instruction[0] \
-                    and 's_and' not in curr_node.instruction[0]:
+                    and "s_and" not in curr_node.instruction[0]:
                 first_reg = first_reg[0] + first_reg[2: first_reg.find(":")]
             if curr_node.state.registers.get(register) is not None:
                 check_version = curr_node.state.registers[register].version

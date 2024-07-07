@@ -33,14 +33,14 @@ class VLshlOr(BaseInstruction):
         }
 
     def to_print_unresolved(self):
-        if self.suffix == 'b32':
+        if self.suffix == "b32":
             self.decompiler_data.write(
                 f"{self.vdst} = ({self.src0} << {self.src1}) | {self.src2} // {self.instruction[0]}\n")
             return self.node
         return super().to_print_unresolved()
 
     def to_fill_node(self):
-        if self.suffix == 'b32':
+        if self.suffix == "b32":
             if is_reg(self.src0) and self.src1.isdigit() and is_reg(self.src2):
                 src0_type = self.node.state.registers[self.src0].type
                 src1_type = self.node.state.registers[self.src2].type

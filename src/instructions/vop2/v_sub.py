@@ -17,7 +17,7 @@ class VSub(BaseInstruction):
     def __init__(self, node, suffix):
         super().__init__(node, suffix)
         self.vdst = self.instruction[1]
-        if self.suffix == 'u32':
+        if self.suffix == "u32":
             self.vcc = self.instruction[2]
             self.src0 = self.instruction[3]
             self.src1 = self.instruction[4]
@@ -26,7 +26,7 @@ class VSub(BaseInstruction):
             self.src1 = self.instruction[3]
 
     def to_print_unresolved(self):
-        if self.suffix == 'u32':
+        if self.suffix == "u32":
             temp = "temp" + str(self.decompiler_data.number_of_temp)
             mask = "mask" + str(self.decompiler_data.number_of_mask)
             self.decompiler_data.write(
@@ -38,16 +38,16 @@ class VSub(BaseInstruction):
             self.decompiler_data.number_of_temp += 1
             self.decompiler_data.number_of_mask += 1
             return self.node
-        if self.suffix == 'f32':
+        if self.suffix == "f32":
             self.decompiler_data.write(f"{self.vdst} = (float){self.src0} - (float){self.src1} // {self.name}\n")
             return self.node
         return super().to_print_unresolved()
 
     def to_fill_node(self):
-        if self.suffix == 'u32':
-            new_val = make_op(self.node, self.src0, self.src1, '-', '(ulong)', suffix=self.suffix)
+        if self.suffix == "u32":
+            new_val = make_op(self.node, self.src0, self.src1, "-", "(ulong)", suffix=self.suffix)
             return v_sub_fill_node(self.node, self.src0, self.src1, self.vdst, new_val, self.suffix)
-        if self.suffix == 'f32':
-            new_val = make_op(self.node, self.src0, self.src1, '-', '(float)', '(float)', suffix=self.suffix)
+        if self.suffix == "f32":
+            new_val = make_op(self.node, self.src0, self.src1, "-", "(float)", "(float)", suffix=self.suffix)
             return v_sub_fill_node(self.node, self.src0, self.src1, self.vdst, new_val, self.suffix)
         return super().to_fill_node()

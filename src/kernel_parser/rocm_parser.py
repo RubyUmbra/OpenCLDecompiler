@@ -14,7 +14,7 @@ def get_dimensions(set_of_config: List[str]) -> str:
 def get_size_of_work_groups(set_of_config: List[str]) -> Optional[List[int]]:
     for row in set_of_config:
         if row.startswith(".reqd_work_group_size "):
-            return [int(it.strip()) for it in row.removeprefix(".reqd_work_group_size ").split(',')]
+            return [int(it.strip()) for it in row.removeprefix(".reqd_work_group_size ").split(",")]
     return None
 
 
@@ -27,26 +27,26 @@ def get_params(set_of_config: List[str]) -> List[KernelArgument]:
     args = []
     offset = 0
     for row in set_of_config:
-        if not row.startswith('.arg '):
+        if not row.startswith(".arg "):
             continue
-        row = row.removeprefix('.arg ')
+        row = row.removeprefix(".arg ")
         name, type_name, size, align, *other = row.split(", ")
         type_name = type_name[1:-1]
         if "global" in other:
             type_name = "__global " + type_name
-        if type_name.endswith('*'):
+        if type_name.endswith("*"):
             type_name = type_name[:-1]
             name = "*" + name
         size = int(size)
         align = int(align)
         if offset % align != 0:
             offset += align - offset % align
-        hidden = name == ''
+        hidden = name == ""
         value_kind = other[0]
-        for i, global_offset_kind in enumerate(['gox', 'goy', 'goz']):
+        for i, global_offset_kind in enumerate(["gox", "goy", "goz"]):
             if value_kind == global_offset_kind:
-                name = f'get_global_offset({i})'
-                type_name = 'long'
+                name = f"get_global_offset({i})"
+                type_name = "long"
         args.append(KernelArgument(
             type_name=type_name,
             name=name,
@@ -114,7 +114,7 @@ def split_kernels_texts(lines: List[str], names: Set[str]) -> Dict[str, List[str
             result[current_kernel].append(line)
 
     for _, text in result.items():
-        while re.match('\\s*s_nop\\s+0x0\\s*', text[-1]):
+        while re.match("\\s*s_nop\\s+0x0\\s*", text[-1]):
             text = text[:-1]
     return result
 

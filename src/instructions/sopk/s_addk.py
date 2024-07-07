@@ -8,7 +8,7 @@ class SAddK(BaseInstruction):
         self.src0, self.simm16 = self.instruction[1:3]
 
     def to_print_unresolved(self):
-        if self.suffix == 'i32':
+        if self.suffix == "i32":
             temp = "temp" + str(self.decompiler_data.number_of_temp)
             self.decompiler_data.write(f"{temp} = {self.src0}\n")
             self.decompiler_data.write(f"{self.src0} = {self.src0} + {self.simm16} // {self.instruction[0]}\n")
@@ -19,8 +19,8 @@ class SAddK(BaseInstruction):
         return super().to_print_unresolved()
 
     def to_fill_node(self):
-        if self.suffix == 'i32':
-            new_value = make_op(self.node, self.src0, self.simm16, '+', '(int)', '(int)', suffix=self.suffix)
+        if self.suffix == "i32":
+            new_value = make_op(self.node, self.src0, self.simm16, "+", "(int)", "(int)", suffix=self.suffix)
             data_type = self.node.state.registers[self.src0].data_type
             reg_type = self.node.state.registers[self.src0].type
             return set_reg_value(self.node, new_value, self.src0, [self.src0, self.simm16], data_type,

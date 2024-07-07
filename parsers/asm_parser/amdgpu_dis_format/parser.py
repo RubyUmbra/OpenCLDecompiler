@@ -110,15 +110,15 @@ class AmdGpuDisParser:
 
     @staticmethod
     def _make_argument(idx, arg):
-        address_space = arg.get('.address_space')
+        address_space = arg.get(".address_space")
         address_space = f"__{address_space} " if address_space else ""
-        type_name = arg.get('.type_name', 'ulong').strip("\'")
+        type_name = arg.get(".type_name", "ulong").strip("'")
         return KernelArgument(
             type_name=address_space + type_name.strip("*"),
-            name=('*' if type_name.endswith('*') else '') + f"arg{idx}",
-            offset=int(arg['.offset'], 16),
-            size=int(arg['.size'], 16),
-            hidden=arg['.value_kind'].startswith('hidden_'),
+            name=("*" if type_name.endswith("*") else "") + f"arg{idx}",
+            offset=int(arg[".offset"], 16),
+            size=int(arg[".size"], 16),
+            hidden=arg[".value_kind"].startswith("hidden_"),
         )
 
     # pylint: disable=R1710
@@ -156,7 +156,7 @@ class AmdGpuDisParser:
                             ConfigData(
                                 dimensions="xyz"[:list(
                                     filter(
-                                        lambda x: x[1] != '0x1',
+                                        lambda x: x[1] != "0x1",
                                         enumerate(self._config[obj.name][".reqd_workgroup_size"])
                                     )
                                 )[-1][0] + 1],

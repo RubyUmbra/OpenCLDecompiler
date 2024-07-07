@@ -19,7 +19,7 @@ CONTEXT = get_context()
 
 
 def process_single_instruction(row, state, parents):
-    instruction = row.strip().replace(',', ' ').split()
+    instruction = row.strip().replace(",", " ").split()
     curr_node = make_cfg_node(instruction, state, parents)
     if not check_realisation_for_node(curr_node, row):
         return None
@@ -32,7 +32,7 @@ def process_src_with_unresolved_instruction(set_of_instructions):
     num = 0
     while num < len(set_of_instructions):
         row = set_of_instructions[num]
-        instruction = row.strip().replace(',', ' ').split()
+        instruction = row.strip().replace(",", " ").split()
         num += 1
         curr_node = make_unresolved_node(instruction, last_node_state)
         if curr_node is None:
@@ -80,14 +80,14 @@ def process_src(  # pylint: disable=R0914
         row = set_of_instructions[num]
         row = row.replace("_e32", "")
         row = row.replace("_e64", "")
-        instruction = row.strip().replace(',', ' ').split()
+        instruction = row.strip().replace(",", " ").split()
         state = last_node.state
         parents = [last_node]
 
-        if 's_or_saveexec' in instruction[0]:
+        if "s_or_saveexec" in instruction[0]:
             common_if_else_part_start_index[-1] = num + 1
-        if ('s_andn2' in instruction[0] or 's_xor' in instruction[0]) \
-                and 'exec' in instruction[1]:
+        if ("s_andn2" in instruction[0] or "s_xor" in instruction[0]) \
+                and "exec" in instruction[1]:
             if_node = if_and_last_in_if_body_nodes[-1][0]
             state = if_node.state
             parents = [if_node]
@@ -98,7 +98,7 @@ def process_src(  # pylint: disable=R0914
                                       + common_part \
                                       + set_of_instructions[num + 1:]
             if_and_last_in_if_body_nodes[-1].append(last_node)
-        if last_node.instruction[0] == 's_branch':
+        if last_node.instruction[0] == "s_branch":
             parents = []
 
         last_node = process_single_instruction(row, state, parents)
@@ -109,12 +109,12 @@ def process_src(  # pylint: disable=R0914
             process_src_with_unresolved_instruction(initial_set_of_instructions)
             return
 
-        if 's_and_saveexec' in instruction[0] or \
-                ('s_and_b' in instruction[0] and 'exec' in instruction[1]):
+        if "s_and_saveexec" in instruction[0] or \
+                ("s_and_b" in instruction[0] and "exec" in instruction[1]):
             if_and_last_in_if_body_nodes.append([last_node])
             common_if_else_part_start_index.append(None)
-        if ('s_or' in instruction[0] or 's_mov' in instruction[0]) and \
-                'exec' in instruction[1] or 's_endpgm' in instruction[0]:
+        if ("s_or" in instruction[0] or "s_mov" in instruction[0]) and \
+                "exec" in instruction[1] or "s_endpgm" in instruction[0]:
             end_exec_condition = last_node.state.registers["exec"] \
                 .exec_condition
             while if_and_last_in_if_body_nodes and \

@@ -29,44 +29,44 @@ def create_opencl_body():
         type_of_var = make_opencl_type(decompiler_data.lds_vars[offsets[key]][1])
         decompiler_data.write("    __local " + type_of_var + " " + decompiler_data.lds_vars[offsets[key]][0]
                               + "[" + str(size_var) + "]" + ";\n")
-    make_output_from_region(decompiler_data.improve_cfg, '    ')
+    make_output_from_region(decompiler_data.improve_cfg, "    ")
     decompiler_data.write("}\n")
 
 
 def write_global_data():
     decompiler_data = DecompilerData()
     for key, var in sorted(decompiler_data.type_gdata.items()):
-        if var in ('uint', 'int'):
-            list_of_gdata_values = evaluate_from_hex(decompiler_data.global_data[key], 4, '<i')
-        elif var in ('ulong', 'long'):
-            list_of_gdata_values = evaluate_from_hex(decompiler_data.global_data[key], 8, '<q')
-        elif var == 'float':
-            list_of_gdata_values = evaluate_from_hex(decompiler_data.global_data[key], 4, '<f')
-        elif var == 'double':
-            list_of_gdata_values = evaluate_from_hex(decompiler_data.global_data[key], 8, '<d')
-        elif var in ('int2', 'int4', 'int8'):
-            list_of_gdata_values = evaluate_from_hex(decompiler_data.global_data[key], 4, '<i')
+        if var in ("uint", "int"):
+            list_of_gdata_values = evaluate_from_hex(decompiler_data.global_data[key], 4, "<i")
+        elif var in ("ulong", "long"):
+            list_of_gdata_values = evaluate_from_hex(decompiler_data.global_data[key], 8, "<q")
+        elif var == "float":
+            list_of_gdata_values = evaluate_from_hex(decompiler_data.global_data[key], 4, "<f")
+        elif var == "double":
+            list_of_gdata_values = evaluate_from_hex(decompiler_data.global_data[key], 8, "<d")
+        elif var in ("int2", "int4", "int8"):
+            list_of_gdata_values = evaluate_from_hex(decompiler_data.global_data[key], 4, "<i")
         else:
             raise NotImplementedError
         decompiler_data.write("__constant " + var + " " + key + "[] = {")
-        if var in ('int2', 'int4', 'int8'):
+        if var in ("int2", "int4", "int8"):
             num = int(var[-1])
             for index, element in enumerate(list_of_gdata_values):
                 if index == 0:
-                    decompiler_data.write('(' + var + ')(')
+                    decompiler_data.write("(" + var + ")(")
                     decompiler_data.write(element)
                 elif index % num == 0:
-                    decompiler_data.write(', (' + var + ')(')
+                    decompiler_data.write(", (" + var + ")(")
                     decompiler_data.write(element)
                 elif index % num == num - 1:
-                    decompiler_data.write(', ' + element)
-                    decompiler_data.write(')')
+                    decompiler_data.write(", " + element)
+                    decompiler_data.write(")")
                 else:
-                    decompiler_data.write(', ' + element)
+                    decompiler_data.write(", " + element)
         else:
             for index, element in enumerate(list_of_gdata_values):
                 if index:
-                    decompiler_data.write(', ' + element)
+                    decompiler_data.write(", " + element)
                 else:
                     decompiler_data.write(element)
         decompiler_data.write("};\n\n")
@@ -100,9 +100,9 @@ def make_output_for_linear_region(region, indent):
                 version = curr_node.state.registers[reg].version
                 var = decompiler_data.variables.get(version)
                 if var is not None and var != curr_node.state.registers[reg].val and \
-                        curr_node.state.registers[reg].val.strip() != '' and (
-                        'cmp' not in curr_node.instruction[0] or
-                        decompiler_data.gpu and decompiler_data.gpu.startswith('gfx')
+                        curr_node.state.registers[reg].val.strip() != "" and (
+                        "cmp" not in curr_node.instruction[0] or
+                        decompiler_data.gpu and decompiler_data.gpu.startswith("gfx")
                 ):  # версия поменялась по сравнению с предком
                     decompiler_data.write(indent + var + " = " + curr_node.state.registers[reg].val + ";\n")
             if curr_node == region.end:
@@ -110,11 +110,11 @@ def make_output_for_linear_region(region, indent):
             child = curr_node.children[0]
             if isinstance(child, Region) and child.type == RegionType.UNROLLED_LOOP:
                 before, first, last, diff, inside = child.start
-                decompiler_data.write(f'    int acc = {before};\n')
-                sign = '<=' if first < last else '>='
-                decompiler_data.write(f'    for (int i = {first}; i {sign} {last}; {diff}) {{\n')
-                decompiler_data.write(f'        acc = {inside};\n')
-                decompiler_data.write('    }\n')
+                decompiler_data.write(f"    int acc = {before};\n")
+                sign = "<=" if first < last else ">="
+                decompiler_data.write(f"    for (int i = {first}; i {sign} {last}; {diff}) {{\n")
+                decompiler_data.write(f"        acc = {inside};\n")
+                decompiler_data.write("    }\n")
                 curr_node = curr_node.children[1]
                 continue
             curr_node = child
@@ -128,7 +128,7 @@ def make_output_for_linear_region(region, indent):
 
 def make_output_from_part_of_if_else(region, indent, num_of_branch):
     branch_body = region.start.children[num_of_branch]
-    make_output_from_region(branch_body, indent + '    ')
+    make_output_from_region(branch_body, indent + "    ")
 
 
 def make_output_from_if_statement_region(region, indent):
@@ -151,7 +151,7 @@ def make_output_from_if_else_statement_region(region, indent):
 def make_output_from_loop_region(region, indent):
     decompiler_data = DecompilerData()
     decompiler_data.write(indent + "do {\n")
-    make_output_from_region(region.start.children[0], indent + '    ')
+    make_output_from_region(region.start.children[0], indent + "    ")
     decompiler_data.write(indent + "} while (")
     statement = to_opencl(region.end.start, OperationStatus.TO_PRINT)
     if "scc0" in region.end.start.instruction[0]:
