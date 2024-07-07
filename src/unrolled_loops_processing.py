@@ -62,7 +62,7 @@ def process_unrolled_loops():  # pylint: disable=R0914
             idx = len(vertices) - 1
             if len(cur.instruction) > 2:
                 for arg in cur.instruction[2:]:
-                    if arg[0] not in 'sv':
+                    if arg[0] not in "sv":
                         continue
                     fromm = edge_ends.get(arg)
                     if fromm:
@@ -75,11 +75,13 @@ def process_unrolled_loops():  # pylint: disable=R0914
         counters: dict[str, int] = {}
         for i, vertex in enumerate(vertices):
             instruction: str = vertex.instruction
-            if instruction == 's_nop':
+            if instruction == "s_nop":
                 continue
             counters[instruction] = counters.get(instruction, 0) + 1
 
-        counters: list[tuple[str, int]] = [(name, cnt) for name, cnt in counters.items() if cnt >= unrolling_limit]
+        counters: list[tuple[str, int]] = [
+            (name, cnt) for name, cnt in counters.items() if cnt >= unrolling_limit
+        ]
         counters.sort(key=lambda x: x[1], reverse=True)
 
         chosen = []
@@ -100,18 +102,25 @@ def process_unrolled_loops():  # pylint: disable=R0914
                         if child.used:
                             continue
                         instruction: str = child.instruction
-                        if instruction == 's_nop':
+                        if instruction == "s_nop":
                             continue
                         counters2[(instruction, j)] = counters2.get((instruction, j), 0) + 1
 
-                counters2: list[tuple[str, int, int]] = [(name, num, cnt) for (name, num), cnt in counters2.items() if
-                                                         cnt >= unrolling_limit and cnt > len(chosen) // 2]
+                counters2: list[tuple[str, int, int]] = [
+                    (name, num, cnt)
+                    for (name, num), cnt in counters2.items()
+                    if cnt >= unrolling_limit and cnt > len(chosen) // 2
+                ]
                 counters2.sort(key=lambda x: x[2], reverse=True)
                 if len(counters2) == 0:
                     break
 
                 name2, child_num2, _ = counters2[0]
-                chosen = [i for i in chosen if vertices[vertices[i].merged_child[child_num2]].instruction == name2]
+                chosen = [
+                    i
+                    for i in chosen
+                    if vertices[vertices[i].merged_child[child_num2]].instruction == name2
+                ]
                 for i in chosen:
                     parent: Vertex = vertices[i]
                     child: Vertex = vertices[parent.merged_child[child_num2]]
@@ -142,16 +151,16 @@ def process_unrolled_loops():  # pylint: disable=R0914
                         return
 
             if len(progressions) == 0:
-                first, last, diff = 0, len(chosen), 'i++'
+                first, last, diff = 0, len(chosen), "i++"
             else:
                 constants = progressions[0]
                 first = constants[0]
                 last = constants[-1]
                 diff = constants[1] - constants[0]
                 if diff < 0:
-                    diff = f'i = i - {-diff}'
+                    diff = f"i = i - {-diff}"
                 else:
-                    diff = f'i = i + {diff}'
+                    diff = f"i = i + {diff}"
 
             dst = vertices[vertices[chosen[-1]].merged_vertices[-1]].node.instruction[1]
 
@@ -160,13 +169,17 @@ def process_unrolled_loops():  # pylint: disable=R0914
             while cur != end and not cur.children[0].exclude_unrolled:
                 cur = cur.children[0]
             before = cur.state.registers[dst].val
-            inside: str = vertices[vertices[chosen[0]].merged_vertices[-1]].node.state.registers[dst].val
-            inside = inside.replace(f"({before})", 'acc').replace(f"{before}", 'acc')
+            inside: str = (
+                vertices[vertices[chosen[0]].merged_vertices[-1]].node.state.registers[dst].val
+            )
+            inside = inside.replace(f"({before})", "acc").replace(f"{before}", "acc")
             if len(progressions) != 0:
-                inside = inside.replace(str(progressions[0][0]), 'i')
+                inside = inside.replace(str(progressions[0][0]), "i")
             while cur != end and cur.children[0].exclude_unrolled:
                 child: Node = cur.children[0]
                 cur.children = child.children
 
-            cur.children[0].state.registers[dst].register_content._value = 'acc'  # pylint: disable=W0212
-            cur.add_first_child(Region(RegionType.UNROLLED_LOOP, (before, first, last, diff, inside)))
+            cur.children[0].state.registers[dst].register_content._value = "acc"  # pylint: disable=W0212
+            cur.add_first_child(
+                Region(RegionType.UNROLLED_LOOP, (before, first, last, diff, inside))
+            )

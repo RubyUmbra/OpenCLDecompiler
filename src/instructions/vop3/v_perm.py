@@ -13,13 +13,15 @@ class VPerm(BaseInstruction):
         self.src2 = self.instruction[4]
 
     def to_print_unresolved(self):
-        if self.suffix == 'b32':
+        if self.suffix == "b32":
             tab = "    "
             qword = "qword" + str(self.decompiler_data.number_of_qword)
             choice = "choice" + str(self.decompiler_data.number_of_choice)
             result = "result" + str(self.decompiler_data.number_of_result)
             self.decompiler_data.write(f"{self.vdst} = 0 // v_perm_b32\n")
-            self.decompiler_data.write(f"ulong {qword} = (((ulong){self.src0})<<32) | {self.src1}\n")
+            self.decompiler_data.write(
+                f"ulong {qword} = (((ulong){self.src0})<<32) | {self.src1}\n"
+            )
             self.decompiler_data.write("for (int i = 0; i < 4; i++)\n")
             self.decompiler_data.write("{\n")
             self.decompiler_data.write(tab + f"byte {choice} = ({self.src2} >> (8*i)) & 0xff\n")
@@ -29,7 +31,9 @@ class VPerm(BaseInstruction):
             self.decompiler_data.write(tab + f"else if ({choice} == 12)\n")
             self.decompiler_data.write(tab + tab + f"{result} = 0\n")
             self.decompiler_data.write(tab + f"else if ({choice} >= 8)\n")
-            self.decompiler_data.write(tab + tab + f"{result} = 0xff * {qword}>>(({choice}-8)*16 + 15)\n")
+            self.decompiler_data.write(
+                tab + tab + f"{result} = 0xff * {qword}>>(({choice}-8)*16 + 15)\n"
+            )
             self.decompiler_data.write(tab + "else\n")
             self.decompiler_data.write(tab + tab + f"{result} = ({qword}>>({choice}*8)) & 0xff\n")
             self.decompiler_data.write(tab + f"{self.vdst} |= ({result} << (i * 8))\n")
@@ -41,9 +45,13 @@ class VPerm(BaseInstruction):
         return super().to_print_unresolved()
 
     def to_fill_node(self):
-        if self.suffix == 'b32':
-            if self.node.state.registers[self.src2].val == '0x2010004':
-                new_value = self.node.state.registers[self.src0].val + ", " + self.node.state.registers[self.src1].val
+        if self.suffix == "b32":
+            if self.node.state.registers[self.src2].val == "0x2010004":
+                new_value = (
+                    self.node.state.registers[self.src0].val
+                    + ", "
+                    + self.node.state.registers[self.src1].val
+                )
                 reg_type = RegisterType.KERNEL_ARGUMENT_VALUE
                 if is_vector_type(self.node.state.registers[self.src0].data_type):
                     src0_data_type_name = self.node.state.registers[self.src0].data_type[:1]

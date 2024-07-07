@@ -35,58 +35,66 @@ OPERATION_TO_PRIORITY = {
 _SUM_SIMPLIFY_COMBINATIONS = [
     *[
         (
-            frozenset({
-                RegisterType[f"GLOBAL_OFFSET_{dim}"],
-                RegisterType[f"WORK_ITEM_ID_{dim}"],
-                RegisterType[f"WORK_GROUP_ID_{dim}_LOCAL_SIZE"],
-            }),
+            frozenset(
+                {
+                    RegisterType[f"GLOBAL_OFFSET_{dim}"],
+                    RegisterType[f"WORK_ITEM_ID_{dim}"],
+                    RegisterType[f"WORK_GROUP_ID_{dim}_LOCAL_SIZE"],
+                }
+            ),
             (
                 f"get_global_id({i})",
                 RegisterType[f"GLOBAL_ID_{dim}"],
                 RegisterSignType.POSITIVE,
-            )
+            ),
         )
         for i, dim in enumerate("XYZ")
     ],
     *[
         (
-            frozenset({
-                RegisterType[f"GLOBAL_OFFSET_{dim}"],
-                RegisterType[f"WORK_GROUP_ID_{dim}_WORK_ITEM_ID"],
-            }),
+            frozenset(
+                {
+                    RegisterType[f"GLOBAL_OFFSET_{dim}"],
+                    RegisterType[f"WORK_GROUP_ID_{dim}_WORK_ITEM_ID"],
+                }
+            ),
             (
                 f"get_global_id({i})",
                 RegisterType[f"GLOBAL_ID_{dim}"],
                 RegisterSignType.POSITIVE,
-            )
+            ),
         )
         for i, dim in enumerate("XYZ")
     ],
     *[
         (
-            frozenset({
-                RegisterType[f"WORK_ITEM_ID_{dim}"],
-                RegisterType[f"WORK_GROUP_ID_{dim}_LOCAL_SIZE_OFFSET"],
-            }),
+            frozenset(
+                {
+                    RegisterType[f"WORK_ITEM_ID_{dim}"],
+                    RegisterType[f"WORK_GROUP_ID_{dim}_LOCAL_SIZE_OFFSET"],
+                }
+            ),
             (
                 f"get_global_id({i})",
                 RegisterType[f"GLOBAL_ID_{dim}"],
                 RegisterSignType.POSITIVE,
-            )
+            ),
         )
         for i, dim in enumerate("XYZ")
     ],
     *[
         (
-            frozenset({
-                RegisterType[f"NUM_GROUPS_{dim}"],
-                RegisterType[f"WORK_GROUP_ID_{dim}_LOCAL_SIZE"],
-            }),
+            frozenset(
+                {
+                    RegisterType[f"NUM_GROUPS_{dim}"],
+                    RegisterType[f"WORK_GROUP_ID_{dim}_LOCAL_SIZE"],
+                }
+            ),
             (
                 f"get_global_size({i})",
                 RegisterType[f"GLOBAL_SIZE_{dim}"],
                 RegisterSignType.POSITIVE,
-            )
+            ),
         )
         for i, dim in enumerate("XYZ")
     ],
@@ -152,8 +160,14 @@ class OperationRegisterContent(RegisterContent):
                     if is_same_operation:
                         values.extend(register_content._value)
                         types.extend(register_content._type)
-                        sizes.extend(itertools.repeat(register_content._size, len(register_content._value)))
-                        data_types.extend(itertools.repeat(register_content._data_type, len(register_content._value)))
+                        sizes.extend(
+                            itertools.repeat(register_content._size, len(register_content._value))
+                        )
+                        data_types.extend(
+                            itertools.repeat(
+                                register_content._data_type, len(register_content._value)
+                            )
+                        )
                         signs.extend(register_content._sign)
                     else:
                         values.append(f"({register_content.get_value()})")
@@ -182,11 +196,12 @@ class OperationRegisterContent(RegisterContent):
         return self._operation
 
     def get_value(self) -> any:
-        joined_string = f" {self._operation.value} ".join([
-            f"{'-' if sign == RegisterSignType.NEGATIVE else ''}{value}"
-            for value, sign
-            in zip(self._value, self._sign)
-        ])
+        joined_string = f" {self._operation.value} ".join(
+            [
+                f"{'-' if sign == RegisterSignType.NEGATIVE else ''}{value}"
+                for value, sign in zip(self._value, self._sign)
+            ]
+        )
 
         return f"{joined_string}"
 
@@ -205,7 +220,9 @@ class OperationRegisterContent(RegisterContent):
     def maybe_simplify(self) -> Optional[RegisterContent]:
         def maybe_find_opposite_pos() -> Optional[tuple[int, int]]:
             for i, (val_i, type_i, sign_i) in enumerate(zip(self._value, self._type, self._sign)):
-                for j, (val_j, type_j, sign_j) in enumerate(zip(self._value, self._type, self._sign)):
+                for j, (val_j, type_j, sign_j) in enumerate(
+                    zip(self._value, self._type, self._sign)
+                ):
                     if i >= j:
                         continue
 
@@ -239,11 +256,13 @@ class OperationRegisterContent(RegisterContent):
             new_data_type = []
             new_sign = []
 
-            for i, (value, type_, sign) in enumerate(zip(
+            for i, (value, type_, sign) in enumerate(
+                zip(
                     self._value,
                     self._type,
                     self._sign,
-            )):
+                )
+            ):
                 if i in pos_list:
                     continue
 

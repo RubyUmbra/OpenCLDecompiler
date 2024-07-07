@@ -2,8 +2,8 @@ from enum import Enum
 
 
 class DriverFormat(Enum):
-    AMDCL2 = '.amdcl2'
-    ROCM = '.rocm'
+    AMDCL2 = ".amdcl2"
+    ROCM = ".rocm"
     UNKNOWN = None
 
     @classmethod

@@ -2,11 +2,7 @@ from ..model import Model
 
 
 class Block(Model):
-    def __init__(
-            self,
-            name: str,
-            *args: tuple[str, list[str]]
-    ):
+    def __init__(self, name: str, *args: tuple[str, list[str]]):
         self._name = name
         self._args: list[tuple[str, list[str]]] = list(args)
 

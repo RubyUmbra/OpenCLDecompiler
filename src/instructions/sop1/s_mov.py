@@ -11,18 +11,28 @@ class SMov(BaseInstruction):
         self.ssrc0 = self.instruction[2]
 
     def to_print_unresolved(self):
-        if self.suffix in ['b32', 'b64']:
-            self.decompiler_data.write(self.sdst + " = " + self.ssrc0 + " // s_mov_" + self.suffix + "\n")
+        if self.suffix in ["b32", "b64"]:
+            self.decompiler_data.write(
+                self.sdst + " = " + self.ssrc0 + " // s_mov_" + self.suffix + "\n"
+            )
             return self.node
         return super().to_print_unresolved()
 
     def to_fill_node(self):
-        if self.suffix in ['b32', 'b64']:
+        if self.suffix in ["b32", "b64"]:
             if self.sdst == "exec":
-                new_exec_condition = self.decompiler_data.exec_registers["exec"] \
-                                     | self.decompiler_data.exec_registers[self.ssrc0]
-                return set_reg_value(self.node, new_exec_condition.top(), self.sdst, [self.ssrc0], None,
-                                     exec_condition=new_exec_condition)
+                new_exec_condition = (
+                    self.decompiler_data.exec_registers["exec"]
+                    | self.decompiler_data.exec_registers[self.ssrc0]
+                )
+                return set_reg_value(
+                    self.node,
+                    new_exec_condition.top(),
+                    self.sdst,
+                    [self.ssrc0],
+                    None,
+                    exec_condition=new_exec_condition,
+                )
             if self.node.state.registers.get(self.ssrc0) is not None:
                 new_value = self.node.state.registers[self.ssrc0].val
                 reg_type = self.node.state.registers[self.ssrc0].type
