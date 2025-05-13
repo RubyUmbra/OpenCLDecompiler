@@ -18,4 +18,4 @@ jobs:
       - name: Run tests
         run: |
           cd tests
-          uv run pytest -v -n 8
+          uv run pytest -v -n 8 --junitxml=junit/test-results.xml --cov=src --cov-report=xml --cov-report=html --cov-report=term
